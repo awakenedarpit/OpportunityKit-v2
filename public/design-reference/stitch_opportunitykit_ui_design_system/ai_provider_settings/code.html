@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-primary-fixed":"#140067","surface-bg":"#F7F8FC","dark-text-secondary":"#B8C2D9","status-unknown-bg":"#F3F4F6","on-tertiary":"#ffffff","surface-tint":"#5545da","tertiary-fixed":"#e4e0f4","dark-text-body":"#D7DEEB","outline-variant":"#c8c4d7","error-container":"#ffdad6","status-eligible-bg":"#ECFDF5","background":"#f9f9ff","surface-card":"#FFFFFF","inverse-surface":"#223149","status-ineligible":"#EF4444","text-primary":"#17213A","on-primary-fixed-variant":"#3c26c2","primary-container":"#6254e8","tertiary-fixed-dim":"#c8c4d7","text-secondary":"#596780","on-tertiary-fixed-variant":"#464555","primary":"#4937cf","status-eligible":"#10B981","on-primary-container":"#efebff","surface-container":"#e8eeff","on-secondary-fixed":"#261a00","on-tertiary-fixed":"#1b1a28","tertiary-container":"#6b697a","on-surface-variant":"#474555","dark-primary":"#9387FF","surface-dim":"#ccdafa","on-error":"#ffffff","surface-container-high":"#dfe8ff","tertiary":"#535161","surface":"#f9f9ff","error":"#ba1a1a","status-potential-bg":"#FFFBEB","secondary-container":"#fdd88c","border-subtle":"#E3E7F0","on-secondary":"#ffffff","on-surface":"#0c1c33","on-primary":"#ffffff","primary-fixed":"#e3dfff","dark-border":"#344158","on-tertiary-container":"#eeeafe","surface-container-lowest":"#ffffff","dark-bg":"#111827","secondary-fixed":"#ffdf9e","primary-fixed-dim":"#c5c0ff","status-potential":"#F59E0B","dark-text-primary":"#F7F8FC","secondary-fixed-dim":"#e5c278","dark-card":"#202B3D","surface-container-highest":"#d6e3ff","outline":"#787586","dark-surface":"#182235","inverse-on-surface":"#ecf0ff","surface-container-low":"#f0f3ff","dark-secondary":"#D6B779","on-secondary-container":"#785d1d","surface-bright":"#f9f9ff","inverse-primary":"#c5c0ff","secondary":"#755a1b","on-background":"#0c1c33","surface-variant":"#d6e3ff","on-error-container":"#93000a","on-secondary-fixed-variant":"#5b4302","status-unknown":"#6B7280","status-ineligible-bg":"#FEF2F2"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{"space-sm":"0.5rem","space-xs":"0.25rem","space-md":"1rem","space-lg":"1.5rem","margin-desktop":"2.5rem","margin-tablet":"1.5rem","space-xl":"2.25rem","gutter-desktop":"1.75rem",gutter:"1.25rem",margin:"1rem"},fontFamily:{"headline-xl-mobile":["Plus Jakarta Sans"],"code-sm":["JetBrains Mono"],"headline-lg":["Plus Jakarta Sans"],"headline-lg-mobile":["Plus Jakarta Sans"],"body-md":["Inter"],"body-sm":["Inter"],"headline-xl":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"label-md":["Inter"],"body-lg":["Inter"],"label-sm":["Inter"]},fontSize:{"headline-xl-mobile":["1.75rem",{lineHeight:"2.25rem",letterSpacing:"-0.02em",fontWeight:"700"}],"code-sm":["0.75rem",{lineHeight:"1rem",fontWeight:"500"}],"headline-lg":["1.75rem",{lineHeight:"2.25rem",letterSpacing:"-0.02em",fontWeight:"600"}],"headline-lg-mobile":["1.375rem",{lineHeight:"1.75rem",letterSpacing:"-0.015em",fontWeight:"600"}],"body-md":["0.875rem",{lineHeight:"1.375rem",fontWeight:"400"}],"body-sm":["0.8125rem",{lineHeight:"1.25rem",fontWeight:"400"}],"headline-xl":["2.25rem",{lineHeight:"2.75rem",letterSpacing:"-0.025em",fontWeight:"700"}],"headline-sm":["1.125rem",{lineHeight:"1.5rem",fontWeight:"600"}],"headline-md":["1.25rem",{lineHeight:"1.625rem",letterSpacing:"-0.01em",fontWeight:"600"}],"label-md":["0.875rem",{lineHeight:"1.25rem",fontWeight:"500"}],"body-lg":["1rem",{lineHeight:"1.625rem",fontWeight:"400"}],"label-sm":["0.75rem",{lineHeight:"1rem",letterSpacing:"0.025em",fontWeight:"600"}]}}}}</script></head><body class="bg-surface-bg font-body-md text-text-primary antialiased min-h-screen"><aside class="fixed left-0 top-0 h-full w-80 bg-surface-card z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)] overflow-y-auto"><div class="flex flex-col"><div class="px-space-lg pt-space-lg pb-space-md flex items-center gap-space-sm"><img alt="OpportunityKit Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1WR0UqJnQmU2S-QCW8DaFqWRLpWvcCY1dtzxBZINhbXfSUON62Dkf-YXaauYqwWsQLKWDdGqoZE0_tFxmzJ2gdCVX4_eLwSOTdXK-MzsDPLpN016dcMZc1nQz36vvtfm2ArlpKcsMbkMHbXgRKvoBwGb0WQLs5RAL_eHU7w0qQ5YRL6jUk5scyVlEehBeQb4aa68ZNnHuFDXSsM4xQhfVko1IlP1jTZ1T-f4-fjiCG-K3zr7--gbSIR8g"/><div class="flex flex-col min-w-0"><span class="font-headline-sm text-headline-sm text-text-primary leading-tight tracking-tight">OpportunityKit</span><span class="font-label-sm text-label-sm text-text-secondary tracking-normal">Student Discovery Hub</span></div></div><div class="px-space-md pt-space-sm"><span class="px-space-sm font-label-sm text-label-sm uppercase tracking-wider text-text-secondary opacity-75">Platform</span></div><nav class="flex flex-col gap-space-xs px-space-md pt-space-xs" data-active-classes="bg-primary-container text-on-primary-container font-headline-sm rounded-lg"><a class="flex items-center px-space-md py-space-sm rounded-lg text-text-secondary font-label-md text-label-md hover:bg-surface-container hover:text-on-surface transition-all" data-path="overview" href="#">Overview</a><a class="flex items-center px-space-md py-space-sm rounded-lg text-text-secondary font-label-md text-label-md hover:bg-surface-container hover:text-on-surface transition-all" data-path="discover-opportunities" href="#">Discover Opportunities</a><a class="flex items-center px-space-md py-space-sm rounded-lg text-text-secondary font-label-md text-label-md hover:bg-surface-container hover:text-on-surface transition-all" data-path="opportunity-details" href="#">Opportunity Details</a><a class="flex items-center px-space-md py-space-sm rounded-lg text-text-secondary font-label-md text-label-md hover:bg-surface-container hover:text-on-surface transition-all" data-path="saved-opportunities" href="#">Saved Opportunities</a><a class="flex items-center px-space-md py-space-sm rounded-lg text-text-secondary font-label-md text-label-md hover:bg-surface-container hover:text-on-surface transition-all" data-path="application-tracker" href="#">Application Tracker</a><a class="flex items-center px-space-md py-space-sm rounded-lg text-text-secondary font-label-md text-label-md hover:bg-surface-container hover:text-on-surface transition-all" data-path="student-profile" href="#">Student Profile</a><a class="flex items-center px-space-md py-space-sm rounded-lg text-text-secondary font-label-md text-label-md hover:bg-surface-container hover:text-on-surface transition-all" data-path="ai-fit-reports" href="#">AI Fit Reports</a><a aria-current="page" class="flex items-center px-space-md py-space-sm transition-all bg-primary-container text-on-primary-container font-headline-sm rounded-lg" data-path="ai-provider-settings" href="#">AI Provider Settings</a></nav></div><div class="p-space-md flex flex-col gap-space-sm"><div class="flex items-center justify-between px-space-sm py-space-xs rounded-lg bg-surface-container-low"><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-text-secondary text-[18px]">light_mode</span><span class="font-label-sm text-label-sm text-text-secondary">Appearance</span></div><div class="flex items-center gap-space-xs p-0.5 rounded-full bg-surface-card"><button class="px-space-sm py-0.5 rounded-full font-label-sm text-label-sm bg-primary text-on-primary shadow-sm" type="button">Light</button><button class="px-space-sm py-0.5 rounded-full font-label-sm text-label-sm text-text-secondary hover:text-on-surface transition-colors" type="button">Dark</button></div></div><div class="p-space-md rounded-xl bg-surface-container-low flex flex-col gap-space-sm shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center gap-space-sm"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-ujMXh1eBRDuRQLXT8-6Vvewud-VPQ2_Gh9CiSdEhKS1iP6Bt6_24CONchXvafjcWdbZm6dYBPpDKUH4-f3drtcvrGBZ3-Dr0jGXyazz_gW1H-D8aI3U6w3RLSD2kQdUxaOdCB3QZnvf7XLCts5_0JJiBjqwrokJlvqTP6wis6gzUyn3r4dWwAxvSFGmNqjvtl1sKAUGUa23YRd_rdaUqvWTkhVnBiMTfGFby9dAe30OhVo4pKRbM"/><div class="flex flex-col min-w-0"><span class="font-label-md text-label-md font-semibold text-text-primary truncate">Maya Lin</span><span class="font-body-sm text-body-sm text-text-secondary truncate">Computer Science, Jr.</span></div></div><div class="flex items-center justify-between pt-space-xs"><span class="inline-flex items-center px-space-sm py-0.5 rounded-full font-label-sm text-label-sm bg-status-eligible-bg text-status-eligible">Profile 85% complete</span><span class="material-symbols-outlined text-text-secondary text-[18px] hover:text-primary cursor-pointer transition-colors">arrow_forward</span></div></div></div></aside><div class="pl-80"><header class="fixed top-0 left-80 right-0 h-16 bg-surface-card/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-margin-desktop"><div class="flex items-center gap-space-md flex-1 max-w-xl"><div class="relative w-full max-w-md"><span class="material-symbols-outlined absolute left-space-sm top-1/2 -translate-y-1/2 text-text-secondary text-[20px]">search</span><input class="w-full pl-9 pr-space-md py-1.5 rounded-lg bg-surface-container-low font-body-sm text-body-sm text-text-primary placeholder-text-secondary focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="Search scholarships, fellowships, grants..." type="text"/></div></div><div class="flex items-center gap-space-md"><div class="hidden sm:flex items-center gap-space-xs"><span class="inline-flex items-center px-space-sm py-0.5 rounded-full font-label-sm text-label-sm bg-primary-fixed text-on-primary-fixed">Fall 2025 Match Cycle</span></div><button class="p-space-xs rounded-lg text-text-secondary hover:bg-surface-container-low hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span></button><button class="p-space-xs rounded-lg text-text-secondary hover:bg-surface-container-low hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">help_outline</span></button></div></header><main class="w-full pt-16 px-margin-desktop py-space-xl bg-surface-bg"><div class="flex flex-col w-full">
+<!-- Sub-header Breadcrumb and Title Section -->
+<div class="flex flex-col gap-space-xs mb-space-lg">
+<div class="flex items-center gap-space-xs font-code-sm text-code-sm text-text-secondary tracking-wide">
+<span>SYSTEM CONFIGURATION</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary font-semibold">INFERENCE RUNTIME</span>
+</div>
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-text-primary tracking-tight">AI Provider Settings &amp; Multi-Model Orchestration</h1>
+<p class="font-body-md text-body-md text-text-secondary mt-space-xs max-w-3xl">
+          Configure local inference runtimes (Ollama) and optional external AI providers with deterministic fallback prioritization.
+        </p>
+</div>
+<div class="flex items-center gap-space-sm self-start md:self-auto">
+<span class="inline-flex items-center gap-1.5 px-space-md py-1.5 rounded-full font-label-sm text-label-sm bg-status-eligible-bg text-status-eligible shadow-sm">
+<span class="w-2 h-2 rounded-full bg-status-eligible animate-pulse"></span>
+          Orchestrator: 2 Active Nodes
+        </span>
+<button class="flex items-center gap-1 px-space-md py-1.5 rounded-lg font-label-sm text-label-sm bg-surface-card hover:bg-surface-container-low text-text-primary transition-all shadow-sm" id="btn-quick-ping">
+<span class="material-symbols-outlined text-[16px] text-text-secondary">sync</span>
+          Sync Pipeline
+        </button>
+</div>
+</div>
+</div>
+<!-- Safety & Privacy Callout Banner -->
+<div class="relative overflow-hidden rounded-xl bg-surface-card shadow-sm p-space-lg mb-space-lg">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-primary"></div>
+<div class="flex items-start gap-space-md">
+<div class="p-2.5 rounded-lg bg-primary-fixed text-primary shrink-0">
+<span class="material-symbols-outlined text-[24px]">verified_user</span>
+</div>
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center gap-2">
+<h2 class="font-headline-sm text-headline-sm text-text-primary">Data Privacy &amp; Prompt Processing Notice</h2>
+<span class="px-2 py-0.5 rounded font-code-sm text-code-sm bg-surface-container-low text-text-secondary font-medium">RFC-8446 TLS</span>
+</div>
+<p class="font-body-md text-body-md text-text-secondary leading-relaxed">
+          External API providers (<span class="font-medium text-text-primary">Google Gemini</span>, <span class="font-medium text-text-primary">OpenRouter</span>, <span class="font-medium text-text-primary">xAI Grok</span>) process submitted prompts externally over encrypted HTTPS. Profile data is sanitized and stripped of sensitive identity markers prior to inference. All eligibility checks remain strictly deterministic on local Python runtime. API keys are encrypted at rest in your local environment file (<code class="font-code-sm text-code-sm bg-surface-container px-1.5 py-0.5 rounded text-primary">.env</code>) and never stored in client-side code.
+        </p>
+</div>
+</div>
+</div>
+<!-- Main Pipeline & Orchestration Architecture Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-desktop mb-space-xl">
+<!-- Left Column: Priority & Execution Fallback Pipeline (4 cols) -->
+<div class="lg:col-span-4 flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<h3 class="font-headline-sm text-headline-sm text-text-primary">Execution Priority</h3>
+<span class="text-label-sm font-label-sm px-2 py-0.5 rounded bg-surface-container text-text-secondary">Auto-Failover</span>
+</div>
+<span class="font-code-sm text-code-sm text-text-secondary">4 Tiers</span>
+</div>
+<!-- Priority Pipeline Cards -->
+<div class="flex flex-col gap-space-sm" id="priority-list">
+<!-- Priority 1: Gemini -->
+<div class="p-space-md rounded-xl bg-surface-card shadow-sm hover:shadow-md transition-all flex flex-col gap-space-xs relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-primary-fixed/40 to-transparent pointer-events-none rounded-tr-xl"></div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-primary text-on-primary font-code-sm text-code-sm flex items-center justify-center font-bold">1</span>
+<span class="font-label-md text-label-md font-semibold text-text-primary">Google Gemini</span>
+</div>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm bg-status-eligible-bg text-status-eligible">
+<span class="w-1.5 h-1.5 rounded-full bg-status-eligible"></span>
+              CONNECTED (Active)
+            </span>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary">Primary Reasoning &amp; Fit Summaries (Default engine)</p>
+<div class="flex items-center justify-between pt-2 mt-1">
+<span class="font-code-sm text-code-sm text-text-secondary">Timeout: 4500ms</span>
+<span class="material-symbols-outlined text-text-secondary text-[18px] cursor-grab opacity-60 group-hover:opacity-100">drag_handle</span>
+</div>
+</div>
+<!-- Priority 2: Ollama Local -->
+<div class="p-space-md rounded-xl bg-surface-card shadow-sm hover:shadow-md transition-all flex flex-col gap-space-xs relative overflow-hidden group">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-surface-container-high text-text-primary font-code-sm text-code-sm flex items-center justify-center font-bold">2</span>
+<span class="font-label-md text-label-md font-semibold text-text-primary">Ollama Local Inference</span>
+</div>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm bg-primary-fixed text-on-primary-fixed">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+              LOCAL (0-Cost)
+            </span>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary">Zero-cost deterministic local fallback if network drop occurs</p>
+<div class="flex items-center justify-between pt-2 mt-1">
+<span class="font-code-sm text-code-sm text-text-secondary">127.0.0.1:11434</span>
+<span class="material-symbols-outlined text-text-secondary text-[18px] cursor-grab opacity-60 group-hover:opacity-100">drag_handle</span>
+</div>
+</div>
+<!-- Priority 3: OpenRouter -->
+<div class="p-space-md rounded-xl bg-surface-card shadow-sm hover:shadow-md transition-all flex flex-col gap-space-xs relative overflow-hidden group">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-surface-container text-text-secondary font-code-sm text-code-sm flex items-center justify-center font-bold">3</span>
+<span class="font-label-md text-label-md font-semibold text-text-primary">OpenRouter Gateway</span>
+</div>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm bg-status-potential-bg text-status-potential">
+<span class="w-1.5 h-1.5 rounded-full bg-status-potential"></span>
+              STANDBY
+            </span>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary">Multi-Model dynamic aggregator (Claude 3.5 Sonnet / Llama 3.3)</p>
+<div class="flex items-center justify-between pt-2 mt-1">
+<span class="font-code-sm text-code-sm text-text-secondary">Spend cap: $5.00/mo</span>
+<span class="material-symbols-outlined text-text-secondary text-[18px] cursor-grab opacity-60 group-hover:opacity-100">drag_handle</span>
+</div>
+</div>
+<!-- Priority 4: xAI Grok -->
+<div class="p-space-md rounded-xl bg-surface-container-low shadow-sm flex flex-col gap-space-xs opacity-70">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-surface-container text-text-secondary font-code-sm text-code-sm flex items-center justify-center font-bold">4</span>
+<span class="font-label-md text-label-md font-medium text-text-secondary">xAI Grok Architecture</span>
+</div>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full font-label-sm text-label-sm bg-surface-container-high text-text-secondary">
+              DISABLED
+            </span>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary">Experimental reasoning cluster, currently offline</p>
+<div class="flex items-center justify-between pt-2 mt-1">
+<span class="font-code-sm text-code-sm text-text-secondary">Beta preview</span>
+<span class="material-symbols-outlined text-text-secondary text-[18px]">lock</span>
+</div>
+</div>
+</div>
+<!-- Real-time Fallback Simulator Widget -->
+<div class="rounded-xl bg-surface-card p-space-md shadow-sm mt-space-xs">
+<div class="flex items-center justify-between mb-space-sm">
+<span class="font-label-md text-label-md font-semibold text-text-primary">Pipeline Reliability</span>
+<span class="font-code-sm text-code-sm text-status-eligible font-bold">99.98% SLA</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden flex">
+<div class="h-full bg-primary" style="width: 78%;" title="Gemini 78%"></div>
+<div class="h-full bg-secondary-container" style="width: 18%;" title="Ollama 18%"></div>
+<div class="h-full bg-status-potential" style="width: 4%;" title="OpenRouter 4%"></div>
+</div>
+<div class="flex justify-between items-center mt-space-xs font-code-sm text-code-sm text-text-secondary">
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-primary"></span> Cloud 78%</span>
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-secondary-container"></span> Local 18%</span>
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-status-potential"></span> Router 4%</span>
+</div>
+</div>
+</div>
+<!-- Right Column: Provider Configuration Cards (8 cols) -->
+<div class="lg:col-span-8 flex flex-col gap-space-lg">
+<!-- PROVIDER CARD 1: Google Gemini -->
+<div class="rounded-xl bg-surface-card shadow-sm p-space-lg flex flex-col gap-space-md relative overflow-hidden transition-all hover:shadow-md">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-primary-fixed flex items-center justify-center text-primary shadow-sm font-bold text-headline-sm">
+<span class="material-symbols-outlined text-[24px]">auto_awesome</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h4 class="font-headline-sm text-headline-sm text-text-primary">Google Gemini Engine</h4>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm bg-status-eligible-bg text-status-eligible">
+<span class="w-1.5 h-1.5 rounded-full bg-status-eligible"></span>
+                  Healthy (280ms)
+                </span>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary">Primary external provider for high-density academic synthesis</p>
+</div>
+</div>
+<!-- Streamlit Style Toggle Switch -->
+<label class="relative inline-flex items-center cursor-pointer select-none">
+<input checked="" class="sr-only peer" id="toggle-gemini" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-card after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+<span class="ml-2 font-label-sm text-label-sm text-text-primary">Enabled</span>
+</label>
+</div>
+<!-- Form Elements -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md pt-space-xs">
+<!-- Model Selector -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm text-text-secondary uppercase tracking-wider">Inference Model</label>
+<div class="relative">
+<select class="w-full appearance-none bg-surface-container-low text-text-primary font-body-md text-body-md px-3.5 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all cursor-pointer shadow-sm">
+<option selected="">gemini-1.5-pro (Recommended for deep fit reports)</option>
+<option>gemini-1.5-flash (Fast &amp; lightweight)</option>
+<option>gemini-2.0-flash (Experimental)</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none text-[20px]">expand_more</span>
+</div>
+</div>
+<!-- API Key Input -->
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<label class="font-label-sm text-label-sm text-text-secondary uppercase tracking-wider">API Key (Gemini API Secret)</label>
+<span class="font-code-sm text-code-sm text-status-eligible">Key Verified</span>
+</div>
+<div class="relative flex items-center">
+<input class="w-full bg-surface-container-low text-text-primary font-code-sm text-code-sm px-3.5 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 shadow-sm" placeholder="Paste AIzaSy..." type="password" value="AIzaSyD894uNfQ39Xv821Jkm9zLt901p"/>
+<button class="absolute right-2 px-2.5 py-1 rounded font-label-sm text-label-sm bg-surface-card text-text-secondary hover:text-primary shadow-xs transition-colors">
+                Update
+              </button>
+</div>
+</div>
+</div>
+<!-- Sliders: Temperature & Tokens -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md p-space-md bg-surface-container-low rounded-xl">
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<span class="font-label-sm text-label-sm font-medium text-text-primary">Temperature: Grounding Ratio</span>
+<span class="font-code-sm text-code-sm px-2 py-0.5 rounded bg-surface-card text-primary font-bold">0.20</span>
+</div>
+<input class="w-full accent-primary h-1.5 bg-surface-container rounded-lg cursor-pointer" max="1" min="0" step="0.05" type="range" value="0.2"/>
+<span class="font-body-sm text-body-sm text-text-secondary">Low variance ensures strictly factual citations from application PDFs.</span>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<span class="font-label-sm text-label-sm font-medium text-text-primary">Max Output Tokens</span>
+<span class="font-code-sm text-code-sm px-2 py-0.5 rounded bg-surface-card text-text-primary font-bold">2,048</span>
+</div>
+<input class="w-full accent-primary h-1.5 bg-surface-container rounded-lg cursor-pointer" max="8192" min="512" step="256" type="range" value="2048"/>
+<span class="font-body-sm text-body-sm text-text-secondary">Standard output length for complete eligibility matrices.</span>
+</div>
+</div>
+<!-- Bottom Actions -->
+<div class="flex items-center justify-between pt-space-xs">
+<div class="flex items-center gap-2">
+<button class="px-space-md py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high font-label-sm text-label-sm text-text-primary transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">bolt</span>
+              Test Connection
+            </button>
+<span class="font-body-sm text-body-sm text-text-secondary">Last handshake: 4 minutes ago</span>
+</div>
+<span class="font-code-sm text-code-sm text-text-secondary">Usage: $0.18 / 1,000 reqs</span>
+</div>
+</div>
+<!-- PROVIDER CARD 2: Ollama Local Inference -->
+<div class="rounded-xl bg-surface-card shadow-sm p-space-lg flex flex-col gap-space-md relative overflow-hidden transition-all hover:shadow-md">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-secondary-container flex items-center justify-center text-on-secondary-container shadow-sm font-bold text-headline-sm">
+<span class="material-symbols-outlined text-[24px]">terminal</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h4 class="font-headline-sm text-headline-sm text-text-primary">Ollama Local Daemon</h4>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm bg-status-eligible-bg text-status-eligible">
+<span class="w-1.5 h-1.5 rounded-full bg-status-eligible"></span>
+                  Localhost Active
+                </span>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary">Zero-cost offline processing on host hardware</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer select-none">
+<input checked="" class="sr-only peer" id="toggle-ollama" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-card after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+<span class="ml-2 font-label-sm text-label-sm text-text-primary">Fallback On</span>
+</label>
+</div>
+<!-- Hardware & Daemon Status Badge Strip -->
+<div class="flex flex-wrap items-center gap-space-sm p-space-sm bg-surface-container-low rounded-lg font-code-sm text-code-sm">
+<div class="flex items-center gap-1 text-text-primary font-medium">
+<span class="material-symbols-outlined text-[16px] text-primary">memory</span>
+            Apple Metal / CUDA: Detected
+          </div>
+<span class="text-text-secondary">•</span>
+<span class="text-text-secondary">8 CPU Threads</span>
+<span class="text-text-secondary">•</span>
+<span class="text-text-secondary">16GB Unified Memory</span>
+<span class="text-text-secondary">•</span>
+<span class="text-status-eligible font-semibold">VRAM Allocated: 4.8 GB</span>
+</div>
+<!-- Configuration Inputs -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm text-text-secondary uppercase tracking-wider">Base URL Daemon</label>
+<input class="w-full bg-surface-container-low text-text-primary font-code-sm text-code-sm px-3.5 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 shadow-sm" type="text" value="http://localhost:11434"/>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm text-text-secondary uppercase tracking-wider">Active Local Model</label>
+<div class="relative">
+<select class="w-full appearance-none bg-surface-container-low text-text-primary font-body-md text-body-md px-3.5 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all cursor-pointer shadow-sm">
+<option selected="">qwen2.5:7b-instruct-q4_K_M (Fastest 4-bit)</option>
+<option>llama3.2:3b (Ultra-lightweight)</option>
+<option>mistral:7b (High precision fallback)</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none text-[20px]">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Local Actions Strip -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm pt-space-xs">
+<div class="flex items-center gap-space-sm">
+<button class="px-space-md py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high font-label-sm text-label-sm text-text-primary transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-status-eligible">satellite_alt</span>
+              Ping Local Daemon
+            </button>
+<button class="px-space-md py-1.5 rounded-lg bg-surface-card hover:bg-surface-container font-label-sm text-label-sm text-text-primary shadow-xs transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-text-secondary">download</span>
+              Pull New Model
+            </button>
+</div>
+<span class="font-code-sm text-code-sm text-status-eligible font-medium">$0.00 Running Costs</span>
+</div>
+</div>
+<!-- PROVIDER CARD 3: OpenRouter Multi-Model Router -->
+<div class="rounded-xl bg-surface-card shadow-sm p-space-lg flex flex-col gap-space-md relative overflow-hidden transition-all hover:shadow-md">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-tertiary-fixed flex items-center justify-center text-tertiary shadow-sm font-bold text-headline-sm">
+<span class="material-symbols-outlined text-[24px]">alt_route</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h4 class="font-headline-sm text-headline-sm text-text-primary">OpenRouter Gateway</h4>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm bg-status-potential-bg text-status-potential">
+<span class="w-1.5 h-1.5 rounded-full bg-status-potential"></span>
+                  Standby
+                </span>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary">Flexible multi-model fallback with budget capping</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer select-none">
+<input checked="" class="sr-only peer" id="toggle-openrouter" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-card after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+<span class="ml-2 font-label-sm text-label-sm text-text-primary">Enabled</span>
+</label>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm text-text-secondary uppercase tracking-wider">API Key (OpenRouter Secret)</label>
+<input class="w-full bg-surface-container-low text-text-primary font-code-sm text-code-sm px-3.5 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 shadow-sm" type="password" value="sk-or-v1-98a7cf892b104928"/>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm text-text-secondary uppercase tracking-wider">Preferred Model Route</label>
+<div class="relative">
+<select class="w-full appearance-none bg-surface-container-low text-text-primary font-body-md text-body-md px-3.5 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all cursor-pointer shadow-sm">
+<option selected="">anthropic/claude-3.5-sonnet:beta</option>
+<option>meta-llama/llama-3.3-70b-instruct</option>
+<option>deepseek/deepseek-chat</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none text-[20px]">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Spend Cap & Budget Guardrail -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm font-semibold text-text-primary">Monthly Spend Ceiling</span>
+<span class="font-code-sm text-code-sm text-text-secondary font-medium">$0.42 spent this billing cycle</span>
+</div>
+<span class="font-code-sm text-code-sm font-bold text-text-primary">$5.00 limit</span>
+</div>
+<div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 8.4%;"></div>
+</div>
+<span class="font-body-sm text-body-sm text-text-secondary">Requests will failover to local Ollama if budget ceiling is reached.</span>
+</div>
+<div class="flex items-center justify-between pt-space-xs">
+<button class="px-space-md py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high font-label-sm text-label-sm text-text-primary transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-text-secondary">network_check</span>
+            Test Connection
+          </button>
+<span class="font-code-sm text-code-sm text-text-secondary">Failover latency: ~680ms</span>
+</div>
+</div>
+<!-- PROVIDER CARD 4: xAI Grok (Future / Proposed) -->
+<div class="rounded-xl bg-surface-card/60 shadow-sm p-space-lg flex flex-col gap-space-md relative overflow-hidden opacity-85">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-surface-container-highest flex items-center justify-center text-text-secondary shadow-sm font-bold text-headline-sm">
+<span class="material-symbols-outlined text-[24px]">psychology</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h4 class="font-headline-sm text-headline-sm text-text-secondary">xAI Grok Integration</h4>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full font-label-sm text-label-sm bg-surface-container-high text-text-secondary">
+                  Proposed Architecture / In Beta
+                </span>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary">High-speed reasoning models for deep qualification scoring</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-not-allowed select-none opacity-60">
+<input class="sr-only peer" disabled="" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-card after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+<span class="ml-2 font-label-sm text-label-sm text-text-secondary">Disabled</span>
+</label>
+</div>
+<p class="font-body-md text-body-md text-text-secondary">
+          Provider endpoint provisioning is planned for the v2.4 runtime update. Once Grok-2 API production endpoints stabilize, authentication tokens can be registered here.
+        </p>
+</div>
+</div>
+</div>
+<!-- Runtime Health, Test Bench & Diagnostic Sandbox -->
+<div class="rounded-xl bg-surface-card shadow-sm p-space-lg mb-space-xl flex flex-col gap-space-md">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="p-2 rounded-lg bg-surface-container text-text-primary">
+<span class="material-symbols-outlined text-[22px]">health_and_safety</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-text-primary">Runtime Health &amp; Diagnostic Sandbox</h3>
+<p class="font-body-sm text-body-sm text-text-secondary">Real-time ping, context window inspection, and cost ledger telemetry</p>
+</div>
+</div>
+<button class="flex items-center gap-2 px-space-lg py-2 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md shadow-sm transition-all active:scale-[0.98]" id="btn-run-diag">
+<span class="material-symbols-outlined text-[18px]">play_arrow</span>
+        Run Live End-to-End Diagnostic
+      </button>
+</div>
+<!-- Diagnostic Table Container -->
+<div class="overflow-x-auto rounded-lg bg-surface-container-low">
+<table class="w-full text-left font-body-sm text-body-sm">
+<thead class="bg-surface-container text-text-secondary font-label-sm text-label-sm uppercase tracking-wider">
+<tr>
+<th class="py-3 px-space-md">Provider Name</th>
+<th class="py-3 px-space-md">Endpoint</th>
+<th class="py-3 px-space-md">Handshake Status</th>
+<th class="py-3 px-space-md">Context Window</th>
+<th class="py-3 px-space-md">Est. Cost / Report</th>
+<th class="py-3 px-space-md">Last Health Check</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container">
+<tr class="hover:bg-surface-card/60 transition-colors">
+<td class="py-3.5 px-space-md font-label-md text-label-md font-semibold text-text-primary flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-status-eligible"></span>
+              Google Gemini 1.5 Pro
+            </td>
+<td class="py-3.5 px-space-md font-code-sm text-code-sm text-text-secondary">https://generativelanguage.googleapis.com</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center px-2 py-0.5 rounded font-code-sm text-code-sm bg-status-eligible-bg text-status-eligible font-semibold">
+                HTTP 200 (280ms)
+              </span>
+</td>
+<td class="py-3.5 px-space-md font-code-sm text-code-sm text-text-primary">1,000,000 tokens</td>
+<td class="py-3.5 px-space-md font-code-sm text-code-sm text-text-primary font-medium">$0.0004</td>
+<td class="py-3.5 px-space-md font-body-sm text-body-sm text-text-secondary">Just now</td>
+</tr>
+<tr class="hover:bg-surface-card/60 transition-colors">
+<td class="py-3.5 px-space-md font-label-md text-label-md font-semibold text-text-primary flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-status-eligible"></span>
+              Ollama (qwen2.5:7b)
+            </td>
+<td class="py-3.5 px-space-md font-code-sm text-code-sm text-text-secondary">http://localhost:11434/api/generate</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center px-2 py-0.5 rounded font-code-sm text-code-sm bg-status-eligible-bg text-status-eligible font-semibold">
+                SOCKET ACTIVE (12ms)
+              </span>
+</td>
+<td class="py-3.5 px-space-md font-code-sm text-code-sm text-text-primary">32,768 tokens</td>
+<td class="py-3.5 px-space-md font-code-sm text-code-sm text-status-eligible font-bold">$0.0000 (Local)</td>
+<td class="py-3.5 px-space-md font-body-sm text-body-sm text-text-secondary">1 min ago</td>
+</tr>
+<tr class="hover:bg-surface-card/60 transition-colors">
+<td class="py-3.5 px-space-md font-label-md text-label-md font-semibold text-text-primary flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-status-potential"></span>
+              OpenRouter (Claude 3.5)
+            </td>
+<td class="py-3.5 px-space-md font-code-sm text-code-sm text-text-secondary">https://openrouter.ai/api/v1</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center px-2 py-0.5 rounded font-code-sm text-code-sm bg-status-potential-bg text-status-potential font-semibold">
+                READY / STANDBY
+              </span>
+</td>
+<td class="py-3.5 px-space-md font-code-sm text-code-sm text-text-primary">200,000 tokens</td>
+<td class="py-3.5 px-space-md font-code-sm text-code-sm text-text-primary font-medium">$0.0018</td>
+<td class="py-3.5 px-space-md font-body-sm text-body-sm text-text-secondary">14 mins ago</td>
+</tr>
+<tr class="hover:bg-surface-card/60 transition-colors opacity-75">
+<td class="py-3.5 px-space-md font-label-md text-label-md font-medium text-text-secondary flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-status-unknown"></span>
+              xAI Grok
+            </td>
+<td class="py-3.5 px-space-md font-code-sm text-code-sm text-text-secondary">https://api.x.ai/v1</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center px-2 py-0.5 rounded font-code-sm text-code-sm bg-status-unknown-bg text-status-unknown font-semibold">
+                DISABLED
+              </span>
+</td>
+<td class="py-3.5 px-space-md font-code-sm text-code-sm text-text-secondary">128,000 tokens</td>
+<td class="py-3.5 px-space-md font-code-sm text-code-sm text-text-secondary">--</td>
+<td class="py-3.5 px-space-md font-body-sm text-body-sm text-text-secondary">N/A</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Persistent Bottom Action Strip -->
+<div class="sticky bottom-4 z-30 p-space-md rounded-xl bg-surface-card shadow-xl flex flex-col sm:flex-row items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-sm text-text-secondary">
+<span class="material-symbols-outlined text-primary text-[20px]">save</span>
+<span class="font-body-sm text-body-sm">Unsaved changes will be stored into local <code class="font-code-sm text-code-sm text-text-primary">.streamlit/secrets.toml</code></span>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm w-full sm:w-auto justify-end">
+<button class="px-space-md py-2 rounded-lg font-label-md text-label-md text-text-secondary hover:text-text-primary bg-surface-container-low hover:bg-surface-container transition-colors">
+        Export Config YAML
+      </button>
+<button class="px-space-md py-2 rounded-lg font-label-md text-label-md text-error hover:bg-status-ineligible-bg transition-colors">
+        Revert to Local Defaults (Ollama Only)
+      </button>
+<button class="px-space-lg py-2 rounded-lg font-label-md text-label-md bg-primary hover:bg-primary-container text-on-primary transition-all shadow-sm active:scale-[0.98]" id="btn-save">
+        Save Configuration
+      </button>
+</div>
+</div>
+</div>
+<script>
+  // Simple interactive feedback simulation
+  document.getElementById('btn-save')?.addEventListener('click', function() {
+    const originalText = this.innerHTML;
+    this.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">progress_activity</span> Storing Secrets...';
+    setTimeout(() => {
+      this.innerHTML = '<span class="material-symbols-outlined text-[18px]">check</span> Saved Successfully';
+      this.classList.remove('bg-primary');
+      this.classList.add('bg-status-eligible');
+      setTimeout(() => {
+        this.innerHTML = originalText;
+        this.classList.add('bg-primary');
+        this.classList.remove('bg-status-eligible');
+      }, 2000);
+    }, 600);
+  });
+
+  document.getElementById('btn-run-diag')?.addEventListener('click', function() {
+    const originalText = this.innerHTML;
+    this.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">refresh</span> Probing Cluster...';
+    setTimeout(() => {
+      this.innerHTML = '<span class="material-symbols-outlined text-[18px]">done_all</span> All Nodes Verified';
+      setTimeout(() => {
+        this.innerHTML = originalText;
+      }, 2200);
+    }, 900);
+  });
+</script></main></div></body></html>

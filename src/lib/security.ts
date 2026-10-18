@@ -1,0 +1,2 @@
+export function isValidHttpUrl(value:string) { try { const u=new URL(value); return ['http:','https:'].includes(u.protocol) && !['localhost','127.0.0.1','0.0.0.0','::1'].includes(u.hostname); } catch { return false; } }
+export function isAuthorizedTelegramChat(chatId:string|number) { const allow=(process.env.TELEGRAM_ALLOWED_CHAT_IDS||'').split(',').map(x=>x.trim()).filter(Boolean); return allow.length>0 && allow.includes(String(chatId)); }

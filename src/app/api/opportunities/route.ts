@@ -1,0 +1,2 @@
+import {NextResponse} from 'next/server';import {demoOpportunities} from '@/lib/demo-data';import {getAdminSupabase} from '@/lib/supabase';
+export async function GET(){const db=getAdminSupabase();if(db){const {data,error}=await db.from('opportunities').select('*').order('created_at',{ascending:false}).limit(200);if(!error&&data)return NextResponse.json({items:[...data,...demoOpportunities.filter(d=>!data.some(x=>x.url===d.url))],source:'supabase+curated-demo'});}return NextResponse.json({items:demoOpportunities,source:'demo'});}

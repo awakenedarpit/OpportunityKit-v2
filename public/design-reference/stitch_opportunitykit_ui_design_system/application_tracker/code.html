@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-primary-fixed":"#140067","surface-bg":"#F7F8FC","dark-text-secondary":"#B8C2D9","status-unknown-bg":"#F3F4F6","on-tertiary":"#ffffff","surface-tint":"#5545da","tertiary-fixed":"#e4e0f4","dark-text-body":"#D7DEEB","outline-variant":"#c8c4d7","error-container":"#ffdad6","status-eligible-bg":"#ECFDF5","background":"#f9f9ff","surface-card":"#FFFFFF","inverse-surface":"#223149","status-ineligible":"#EF4444","text-primary":"#17213A","on-primary-fixed-variant":"#3c26c2","primary-container":"#6254e8","tertiary-fixed-dim":"#c8c4d7","text-secondary":"#596780","on-tertiary-fixed-variant":"#464555","primary":"#4937cf","status-eligible":"#10B981","on-primary-container":"#efebff","surface-container":"#e8eeff","on-secondary-fixed":"#261a00","on-tertiary-fixed":"#1b1a28","tertiary-container":"#6b697a","on-surface-variant":"#474555","dark-primary":"#9387FF","surface-dim":"#ccdafa","on-error":"#ffffff","surface-container-high":"#dfe8ff","tertiary":"#535161","surface":"#f9f9ff","error":"#ba1a1a","status-potential-bg":"#FFFBEB","secondary-container":"#fdd88c","border-subtle":"#E3E7F0","on-secondary":"#ffffff","on-surface":"#0c1c33","on-primary":"#ffffff","primary-fixed":"#e3dfff","dark-border":"#344158","on-tertiary-container":"#eeeafe","surface-container-lowest":"#ffffff","dark-bg":"#111827","secondary-fixed":"#ffdf9e","primary-fixed-dim":"#c5c0ff","status-potential":"#F59E0B","dark-text-primary":"#F7F8FC","secondary-fixed-dim":"#e5c278","dark-card":"#202B3D","surface-container-highest":"#d6e3ff","outline":"#787586","dark-surface":"#182235","inverse-on-surface":"#ecf0ff","surface-container-low":"#f0f3ff","dark-secondary":"#D6B779","on-secondary-container":"#785d1d","surface-bright":"#f9f9ff","inverse-primary":"#c5c0ff","secondary":"#755a1b","on-background":"#0c1c33","surface-variant":"#d6e3ff","on-error-container":"#93000a","on-secondary-fixed-variant":"#5b4302","status-unknown":"#6B7280","status-ineligible-bg":"#FEF2F2"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{"space-sm":"0.5rem","space-xs":"0.25rem","space-md":"1rem","space-lg":"1.5rem","margin-desktop":"2.5rem","margin-tablet":"1.5rem","space-xl":"2.25rem","gutter-desktop":"1.75rem",gutter:"1.25rem",margin:"1rem"},fontFamily:{"headline-xl-mobile":["Plus Jakarta Sans"],"code-sm":["JetBrains Mono"],"headline-lg":["Plus Jakarta Sans"],"headline-lg-mobile":["Plus Jakarta Sans"],"body-md":["Inter"],"body-sm":["Inter"],"headline-xl":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"label-md":["Inter"],"body-lg":["Inter"],"label-sm":["Inter"]},fontSize:{"headline-xl-mobile":["1.75rem",{lineHeight:"2.25rem",letterSpacing:"-0.02em",fontWeight:"700"}],"code-sm":["0.75rem",{lineHeight:"1rem",fontWeight:"500"}],"headline-lg":["1.75rem",{lineHeight:"2.25rem",letterSpacing:"-0.02em",fontWeight:"600"}],"headline-lg-mobile":["1.375rem",{lineHeight:"1.75rem",letterSpacing:"-0.015em",fontWeight:"600"}],"body-md":["0.875rem",{lineHeight:"1.375rem",fontWeight:"400"}],"body-sm":["0.8125rem",{lineHeight:"1.25rem",fontWeight:"400"}],"headline-xl":["2.25rem",{lineHeight:"2.75rem",letterSpacing:"-0.025em",fontWeight:"700"}],"headline-sm":["1.125rem",{lineHeight:"1.5rem",fontWeight:"600"}],"headline-md":["1.25rem",{lineHeight:"1.625rem",letterSpacing:"-0.01em",fontWeight:"600"}],"label-md":["0.875rem",{lineHeight:"1.25rem",fontWeight:"500"}],"body-lg":["1rem",{lineHeight:"1.625rem",fontWeight:"400"}],"label-sm":["0.75rem",{lineHeight:"1rem",letterSpacing:"0.025em",fontWeight:"600"}]}}}}</script></head><body class="bg-surface-bg font-body-md text-text-primary antialiased min-h-screen"><aside class="fixed left-0 top-0 h-full w-80 bg-surface-card z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col"><div class="px-space-lg pt-space-lg pb-space-md flex items-center gap-space-sm"><img alt="OpportunityKit Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1WR0UqJnQmU2S-QCW8DaFqWRLpWvcCY1dtzxBZINhbXfSUON62Dkf-YXaauYqwWsQLKWDdGqoZE0_tFxmzJ2gdCVX4_eLwSOTdXK-MzsDPLpN016dcMZc1nQz36vvtfm2ArlpKcsMbkMHbXgRKvoBwGb0WQLs5RAL_eHU7w0qQ5YRL6jUk5scyVlEehBeQb4aa68ZNnHuFDXSsM4xQhfVko1IlP1jTZ1T-f4-fjiCG-K3zr7--gbSIR8g"/><div class="flex flex-col min-w-0"><span class="font-headline-sm text-headline-sm text-text-primary leading-tight tracking-tight">OpportunityKit</span><span class="font-label-sm text-label-sm text-text-secondary tracking-normal">Student Discovery Hub</span></div></div><div class="px-space-md pt-space-sm"><span class="px-space-sm font-label-sm text-label-sm uppercase tracking-wider text-text-secondary opacity-75">Platform</span></div><nav class="flex flex-col gap-space-xs px-space-md pt-space-xs" data-active-classes="bg-primary-container text-on-primary-container font-headline-sm rounded-lg"><a class="flex items-center px-space-md py-space-sm rounded-lg text-text-secondary font-label-md text-label-md hover:bg-surface-container hover:text-on-surface transition-all" data-path="overview" href="#">Overview</a><a class="flex items-center px-space-md py-space-sm rounded-lg text-text-secondary font-label-md text-label-md hover:bg-surface-container hover:text-on-surface transition-all" data-path="discover-opportunities" href="#">Discover Opportunities</a><a class="flex items-center px-space-md py-space-sm rounded-lg text-text-secondary font-label-md text-label-md hover:bg-surface-container hover:text-on-surface transition-all" data-path="opportunity-details" href="#">Opportunity Details</a><a class="flex items-center px-space-md py-space-sm rounded-lg text-text-secondary font-label-md text-label-md hover:bg-surface-container hover:text-on-surface transition-all" data-path="saved-opportunities" href="#">Saved Opportunities</a><a aria-current="page" class="flex items-center px-space-md py-space-sm transition-all bg-primary-container text-on-primary-container font-headline-sm rounded-lg" data-path="application-tracker" href="#">Application Tracker</a><a class="flex items-center px-space-md py-space-sm rounded-lg text-text-secondary font-label-md text-label-md hover:bg-surface-container hover:text-on-surface transition-all" data-path="student-profile" href="#">Student Profile</a></nav></div><div class="p-space-md flex flex-col gap-space-sm"><div class="flex items-center justify-between px-space-sm py-space-xs rounded-lg bg-surface-container-low"><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-text-secondary text-[18px]">light_mode</span><span class="font-label-sm text-label-sm text-text-secondary">Appearance</span></div><div class="flex items-center gap-space-xs p-0.5 rounded-full bg-surface-card"><button class="px-space-sm py-0.5 rounded-full font-label-sm text-label-sm bg-primary text-on-primary shadow-sm" type="button">Light</button><button class="px-space-sm py-0.5 rounded-full font-label-sm text-label-sm text-text-secondary hover:text-on-surface transition-colors" type="button">Dark</button></div></div><div class="p-space-md rounded-xl bg-surface-container-low flex flex-col gap-space-sm shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center gap-space-sm"><img alt="Maya Lin Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-ujMXh1eBRDuRQLXT8-6Vvewud-VPQ2_Gh9CiSdEhKS1iP6Bt6_24CONchXvafjcWdbZm6dYBPpDKUH4-f3drtcvrGBZ3-Dr0jGXyazz_gW1H-D8aI3U6w3RLSD2kQdUxaOdCB3QZnvf7XLCts5_0JJiBjqwrokJlvqTP6wis6gzUyn3r4dWwAxvSFGmNqjvtl1sKAUGUa23YRd_rdaUqvWTkhVnBiMTfGFby9dAe30OhVo4pKRbM"/><div class="flex flex-col min-w-0"><span class="font-label-md text-label-md font-semibold text-text-primary truncate">Maya Lin</span><span class="font-body-sm text-body-sm text-text-secondary truncate">Computer Science, Jr.</span></div></div><div class="flex items-center justify-between pt-space-xs"><span class="inline-flex items-center px-space-sm py-0.5 rounded-full font-label-sm text-label-sm bg-status-eligible-bg text-status-eligible">Profile 85% complete</span><span class="material-symbols-outlined text-text-secondary text-[18px] hover:text-primary cursor-pointer transition-colors">arrow_forward</span></div></div></div></aside><div class="pl-80"><header class="fixed top-0 left-80 right-0 h-16 bg-surface-card/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-margin-desktop"><div class="flex items-center gap-space-md flex-1 max-w-xl"><div class="relative w-full max-w-md"><span class="material-symbols-outlined absolute left-space-sm top-1/2 -translate-y-1/2 text-text-secondary text-[20px]">search</span><input class="w-full pl-9 pr-space-md py-1.5 rounded-lg bg-surface-container-low font-body-sm text-body-sm text-text-primary placeholder-text-secondary focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="Search scholarships, fellowships, grants..." type="text"/></div></div><div class="flex items-center gap-space-md"><div class="hidden sm:flex items-center gap-space-xs"><span class="inline-flex items-center px-space-sm py-0.5 rounded-full font-label-sm text-label-sm bg-primary-fixed text-on-primary-fixed">Fall 2025 Match Cycle</span></div><button class="p-space-xs rounded-lg text-text-secondary hover:bg-surface-container-low hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span></button><button class="p-space-xs rounded-lg text-text-secondary hover:bg-surface-container-low hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">help_outline</span></button></div></header><main class="w-full pt-16 px-margin-desktop py-space-xl bg-surface-bg"><div class="flex flex-col w-full">
+<!-- Demo Notice Banner -->
+<div class="mb-space-lg flex items-center justify-between px-space-md py-space-sm rounded-xl bg-status-potential-bg text-status-potential shadow-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<span class="material-symbols-outlined text-[20px] flex-shrink-0" style="font-variation-settings: 'FILL' 1;">info</span>
+<div class="flex items-center gap-space-xs truncate">
+<span class="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-status-potential">Demo Environment</span>
+<span class="text-text-secondary opacity-40">/</span>
+<span class="font-body-sm text-body-sm text-text-primary truncate">DEMO DATA — NOT A REAL OPPORTUNITY. Application stages are simulated for workflow demonstration.</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm flex-shrink-0 ml-space-md">
+<span class="font-code-sm text-code-sm text-text-secondary px-space-sm py-0.5 rounded-full bg-surface-card shadow-sm">v2.4-sim</span>
+<button class="text-text-secondary hover:text-text-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</div>
+<!-- Header & Toolbar -->
+<div class="flex flex-col gap-space-md mb-space-lg">
+<div class="flex flex-wrap items-center justify-between gap-space-md">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-code-sm text-code-sm text-primary uppercase tracking-widest font-semibold">Workflow Engine</span>
+<span class="text-text-secondary opacity-40">/</span>
+<span class="font-label-sm text-label-sm text-text-secondary">Pipeline Automation</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-text-primary tracking-tight">Application Tracker</h1>
+<p class="font-body-md text-body-md text-text-secondary mt-space-xs">Manage active opportunity submissions, track critical deadlines, and log lifecycle transitions in real time.</p>
+</div>
+<!-- Action Group -->
+<div class="flex items-center gap-space-sm">
+<!-- View Toggle (Board Active) -->
+<div class="flex items-center p-1 rounded-lg bg-surface-container-low shadow-sm">
+<button class="flex items-center gap-space-xs px-space-sm py-1.5 rounded-lg bg-surface-card font-label-sm text-label-sm text-primary shadow-sm transition-all" type="button">
+<span class="material-symbols-outlined text-[16px]">view_kanban</span>
+<span>Board</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-sm py-1.5 rounded-lg text-text-secondary hover:text-text-primary font-label-sm text-label-sm transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">table_rows</span>
+<span>Table</span>
+</button>
+</div>
+<button class="flex items-center gap-space-xs px-space-md py-2 rounded-lg bg-surface-card text-text-primary hover:bg-surface-container-low font-label-md text-label-md shadow-sm transition-all" type="button">
+<span class="material-symbols-outlined text-[18px] text-text-secondary">file_download</span>
+<span>Export Log</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-2 rounded-lg bg-primary-container text-on-primary-container hover:bg-primary font-label-md text-label-md shadow-sm hover:shadow transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span>Add Custom Application</span>
+</button>
+</div>
+</div>
+<!-- Pipeline Summary Metrics Metric Strips -->
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-space-sm p-space-sm rounded-xl bg-surface-card shadow-sm">
+<div class="flex flex-col px-space-sm py-space-xs rounded-lg bg-surface-container-low">
+<span class="font-label-sm text-label-sm text-text-secondary uppercase tracking-wider">Active Apps</span>
+<div class="flex items-baseline gap-space-xs mt-0.5">
+<span class="font-headline-lg text-headline-lg text-text-primary font-bold">4</span>
+<span class="font-code-sm text-code-sm text-primary">All Live</span>
+</div>
+</div>
+<div class="flex flex-col px-space-sm py-space-xs rounded-lg bg-surface-container">
+<span class="font-label-sm text-label-sm text-text-secondary uppercase tracking-wider">Planning</span>
+<div class="flex items-baseline gap-space-xs mt-0.5">
+<span class="font-headline-lg text-headline-lg text-text-primary font-semibold">1</span>
+<span class="font-label-sm text-label-sm text-text-secondary">25%</span>
+</div>
+</div>
+<div class="flex flex-col px-space-sm py-space-xs rounded-lg bg-surface-container">
+<span class="font-label-sm text-label-sm text-text-secondary uppercase tracking-wider">In Progress</span>
+<div class="flex items-baseline gap-space-xs mt-0.5">
+<span class="font-headline-lg text-headline-lg text-primary font-semibold">1</span>
+<span class="font-label-sm text-label-sm text-text-secondary">Urgent</span>
+</div>
+</div>
+<div class="flex flex-col px-space-sm py-space-xs rounded-lg bg-surface-container">
+<span class="font-label-sm text-label-sm text-text-secondary uppercase tracking-wider">Submitted</span>
+<div class="flex items-baseline gap-space-xs mt-0.5">
+<span class="font-headline-lg text-headline-lg text-text-primary font-semibold">1</span>
+<span class="font-label-sm text-label-sm text-status-eligible">Verified</span>
+</div>
+</div>
+<div class="flex flex-col px-space-sm py-space-xs rounded-lg bg-surface-container">
+<span class="font-label-sm text-label-sm text-text-secondary uppercase tracking-wider">Interview</span>
+<div class="flex items-baseline gap-space-xs mt-0.5">
+<span class="font-headline-lg text-headline-lg text-status-potential font-semibold">1</span>
+<span class="font-label-sm text-label-sm text-text-secondary">Round 1</span>
+</div>
+</div>
+<div class="flex flex-col px-space-sm py-space-xs rounded-lg bg-surface-container-low opacity-75">
+<span class="font-label-sm text-label-sm text-text-secondary uppercase tracking-wider">Offers</span>
+<div class="flex items-baseline gap-space-xs mt-0.5">
+<span class="font-headline-lg text-headline-lg text-text-secondary font-semibold">0</span>
+<span class="font-label-sm text-label-sm text-text-secondary">Pending</span>
+</div>
+</div>
+<div class="flex flex-col px-space-sm py-space-xs rounded-lg bg-surface-container-low opacity-75">
+<span class="font-label-sm text-label-sm text-text-secondary uppercase tracking-wider">Archived</span>
+<div class="flex items-baseline gap-space-xs mt-0.5">
+<span class="font-headline-lg text-headline-lg text-text-secondary font-semibold">0</span>
+<span class="font-label-sm text-label-sm text-text-secondary">Past cycles</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Kanban Swimlanes Grid (5 Columns) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-space-md items-start mb-space-xl">
+<!-- Column 1: Planning -->
+<div class="flex flex-col rounded-xl bg-surface-container-low p-space-sm shadow-sm min-h-[580px]">
+<div class="flex items-center justify-between px-space-xs py-space-xs mb-space-sm">
+<div class="flex items-center gap-space-xs">
+<div class="w-2.5 h-2.5 rounded-full bg-status-unknown"></div>
+<span class="font-headline-sm text-headline-sm text-text-primary">Planning</span>
+<span class="px-2 py-0.5 rounded-full font-code-sm text-code-sm bg-surface-card text-text-secondary shadow-sm">1</span>
+</div>
+<button class="text-text-secondary hover:text-text-primary p-1 rounded hover:bg-surface-card transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">more_horiz</span>
+</button>
+</div>
+<!-- Card: Quantum Computing Summer Research -->
+<div class="flex flex-col rounded-xl bg-surface-card p-space-md shadow-sm hover:shadow-md transition-all group">
+<div class="flex items-start justify-between gap-space-xs mb-space-xs">
+<span class="px-space-sm py-0.5 rounded-full font-label-sm text-label-sm bg-surface-container text-text-primary">Research</span>
+<span class="material-symbols-outlined text-text-secondary hover:text-primary cursor-pointer text-[18px]">drag_indicator</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-text-primary leading-snug group-hover:text-primary transition-colors">
+          Quantum Computing Summer Research
+        </h3>
+<p class="font-body-sm text-body-sm text-text-secondary mt-0.5">Frontier Physics Consortium</p>
+<!-- Deadline Tag -->
+<div class="mt-space-sm flex items-center gap-space-xs px-space-sm py-1 rounded-lg bg-surface-container-low text-text-secondary">
+<span class="material-symbols-outlined text-[16px] text-text-secondary">schedule</span>
+<span class="font-label-sm text-label-sm">Deadline: March 30, 2025</span>
+<span class="ml-auto font-code-sm text-code-sm text-primary font-semibold">14d left</span>
+</div>
+<!-- Checklist Component -->
+<div class="mt-space-md pt-space-sm flex flex-col gap-space-xs bg-surface-container-lowest rounded-lg p-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm font-semibold text-text-primary">Prerequisites</span>
+<span class="font-code-sm text-code-sm text-text-secondary">1/2 tasks</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-status-eligible h-1.5 rounded-full" style="width: 50%"></div>
+</div>
+<div class="flex items-center gap-space-xs mt-1">
+<span class="material-symbols-outlined text-status-eligible text-[16px]">check_circle</span>
+<span class="font-body-sm text-body-sm text-text-secondary truncate">Coursework transcript verified</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-text-secondary text-[16px]">radio_button_unchecked</span>
+<span class="font-body-sm text-body-sm text-text-secondary truncate">Faculty recommendation letter</span>
+</div>
+</div>
+<!-- Card Actions & Stage Transition -->
+<div class="mt-space-md pt-space-sm flex items-center justify-between gap-space-xs">
+<button class="font-label-sm text-label-sm text-text-secondary hover:text-text-primary flex items-center gap-1 transition-colors" type="button">
+<span>Details</span>
+<span class="material-symbols-outlined text-[14px]">arrow_outward</span>
+</button>
+<div class="relative inline-block text-left">
+<button class="flex items-center gap-1 px-space-sm py-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-primary font-label-sm text-label-sm transition-colors" type="button">
+<span>Advance to In Progress</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Column 2: In Progress -->
+<div class="flex flex-col rounded-xl bg-surface-container-low p-space-sm shadow-sm min-h-[580px]">
+<div class="flex items-center justify-between px-space-xs py-space-xs mb-space-sm">
+<div class="flex items-center gap-space-xs">
+<div class="w-2.5 h-2.5 rounded-full bg-primary"></div>
+<span class="font-headline-sm text-headline-sm text-text-primary">In Progress</span>
+<span class="px-2 py-0.5 rounded-full font-code-sm text-code-sm bg-surface-card text-primary font-semibold shadow-sm">1</span>
+</div>
+<button class="text-text-secondary hover:text-text-primary p-1 rounded hover:bg-surface-card transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">more_horiz</span>
+</button>
+</div>
+<!-- Card: Civic Tech Innovation Fellowship 2025 -->
+<div class="flex flex-col rounded-xl bg-surface-card p-space-md shadow-sm hover:shadow-md transition-all group">
+<div class="flex items-start justify-between gap-space-xs mb-space-xs">
+<span class="px-space-sm py-0.5 rounded-full font-label-sm text-label-sm bg-primary-fixed text-on-primary-fixed font-semibold">Fellowship</span>
+<span class="material-symbols-outlined text-text-secondary hover:text-primary cursor-pointer text-[18px]">drag_indicator</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-text-primary leading-snug group-hover:text-primary transition-colors">
+          Civic Tech Innovation Fellowship 2025
+        </h3>
+<p class="font-body-sm text-body-sm text-text-secondary mt-0.5">Open Tech Institute</p>
+<!-- Deadline Tag with Warning -->
+<div class="mt-space-sm flex items-center gap-space-xs px-space-sm py-1 rounded-lg bg-status-potential-bg text-status-potential">
+<span class="material-symbols-outlined text-[16px] text-status-potential">priority_high</span>
+<span class="font-label-sm text-label-sm font-semibold">Deadline: March 28, 2025</span>
+<span class="ml-auto font-code-sm text-code-sm font-bold">12d left</span>
+</div>
+<!-- Task Progress Visual -->
+<div class="mt-space-md pt-space-sm flex flex-col gap-space-xs bg-surface-container-lowest rounded-lg p-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm font-semibold text-text-primary">Submission Progress</span>
+<span class="font-code-sm text-code-sm text-primary font-bold">66%</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary-container h-1.5 rounded-full transition-all duration-500" style="width: 66%"></div>
+</div>
+<div class="flex flex-col gap-1 mt-1 text-text-secondary">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-status-eligible text-[16px]">check_circle</span>
+<span class="font-body-sm text-body-sm truncate">Statement of Intent drafted (500w)</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-status-eligible text-[16px]">check_circle</span>
+<span class="font-body-sm text-body-sm truncate">Code sample GitHub repository linked</span>
+</div>
+</div>
+</div>
+<!-- Next Critical Step Callout -->
+<div class="mt-space-sm px-space-sm py-2 rounded-lg bg-surface-container-low flex items-start gap-space-xs">
+<span class="material-symbols-outlined text-[16px] text-primary flex-shrink-0 mt-0.5">arrow_circle_right</span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm text-text-primary font-semibold">Next Action</span>
+<span class="font-body-sm text-body-sm text-text-secondary truncate">Submit verified student profile by March 25</span>
+</div>
+</div>
+<!-- Card Actions & Stage Transition -->
+<div class="mt-space-md pt-space-sm flex items-center justify-between gap-space-xs">
+<button class="font-label-sm text-label-sm text-text-secondary hover:text-text-primary flex items-center gap-1 transition-colors" type="button">
+<span>View Details</span>
+<span class="material-symbols-outlined text-[14px]">arrow_outward</span>
+</button>
+<button class="flex items-center gap-1 px-space-sm py-1 rounded-lg bg-primary-container hover:bg-primary text-on-primary-container font-label-sm text-label-sm shadow-sm transition-all" type="button">
+<span>Move to Submitted</span>
+<span class="material-symbols-outlined text-[16px]">done_all</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Column 3: Submitted -->
+<div class="flex flex-col rounded-xl bg-surface-container-low p-space-sm shadow-sm min-h-[580px]">
+<div class="flex items-center justify-between px-space-xs py-space-xs mb-space-sm">
+<div class="flex items-center gap-space-xs">
+<div class="w-2.5 h-2.5 rounded-full bg-status-eligible"></div>
+<span class="font-headline-sm text-headline-sm text-text-primary">Submitted</span>
+<span class="px-2 py-0.5 rounded-full font-code-sm text-code-sm bg-surface-card text-status-eligible font-semibold shadow-sm">1</span>
+</div>
+<button class="text-text-secondary hover:text-text-primary p-1 rounded hover:bg-surface-card transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">more_horiz</span>
+</button>
+</div>
+<!-- Card: MIT Media Lab Summer Intern -->
+<div class="flex flex-col rounded-xl bg-surface-card p-space-md shadow-sm hover:shadow-md transition-all group">
+<div class="flex items-start justify-between gap-space-xs mb-space-xs">
+<span class="px-space-sm py-0.5 rounded-full font-label-sm text-label-sm bg-surface-container text-text-primary">Internship</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm bg-status-eligible-bg text-status-eligible">
+<span class="w-1.5 h-1.5 rounded-full bg-status-eligible"></span>
+            Received
+          </span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-text-primary leading-snug group-hover:text-primary transition-colors">
+          MIT Media Lab Summer Intern
+        </h3>
+<p class="font-body-sm text-body-sm text-text-secondary mt-0.5">MIT Media Lab</p>
+<!-- Submission Metadata -->
+<div class="mt-space-sm flex flex-col gap-1 p-space-sm rounded-lg bg-surface-container-lowest">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-text-secondary">Submitted</span>
+<span class="font-code-sm text-code-sm text-text-primary">Yesterday at 4:15 PM</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-text-secondary">Receipt Code</span>
+<span class="font-code-sm text-code-sm text-primary font-semibold">#APP-8842-ML</span>
+</div>
+</div>
+<!-- Next Expected Update Timeline -->
+<div class="mt-space-sm p-space-sm rounded-lg bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[18px] text-text-secondary">update</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-text-secondary">Expected Decision</span>
+<span class="font-label-sm text-label-sm text-text-primary font-semibold">April 15, 2025</span>
+</div>
+</div>
+<span class="font-code-sm text-code-sm text-text-secondary px-2 py-0.5 rounded bg-surface-card shadow-sm">~28 days</span>
+</div>
+<!-- Card Actions & Stage Transition -->
+<div class="mt-space-md pt-space-sm flex items-center justify-between gap-space-xs">
+<button class="font-label-sm text-label-sm text-text-secondary hover:text-text-primary flex items-center gap-1 transition-colors" type="button">
+<span>Confirmation</span>
+<span class="material-symbols-outlined text-[14px]">receipt_long</span>
+</button>
+<button class="flex items-center gap-1 px-space-sm py-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-primary font-label-sm text-label-sm transition-colors" type="button">
+<span>Move to Interview</span>
+<span class="material-symbols-outlined text-[16px]">event_available</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Column 4: Interview -->
+<div class="flex flex-col rounded-xl bg-surface-container-low p-space-sm shadow-sm min-h-[580px]">
+<div class="flex items-center justify-between px-space-xs py-space-xs mb-space-sm">
+<div class="flex items-center gap-space-xs">
+<div class="w-2.5 h-2.5 rounded-full bg-status-potential"></div>
+<span class="font-headline-sm text-headline-sm text-text-primary">Interview</span>
+<span class="px-2 py-0.5 rounded-full font-code-sm text-code-sm bg-surface-card text-status-potential font-semibold shadow-sm">1</span>
+</div>
+<button class="text-text-secondary hover:text-text-primary p-1 rounded hover:bg-surface-card transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">more_horiz</span>
+</button>
+</div>
+<!-- Card: NextGen AI & Ethics Global Hackathon -->
+<div class="flex flex-col rounded-xl bg-surface-card p-space-md shadow-sm hover:shadow-md transition-all group">
+<div class="flex items-start justify-between gap-space-xs mb-space-xs">
+<span class="px-space-sm py-0.5 rounded-full font-label-sm text-label-sm bg-primary-fixed text-on-primary-fixed font-semibold">Hackathon</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm bg-status-potential-bg text-status-potential">
+<span class="w-1.5 h-1.5 rounded-full bg-status-potential"></span>
+            Sync Booked
+          </span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-text-primary leading-snug group-hover:text-primary transition-colors">
+          NextGen AI &amp; Ethics Global Hackathon
+        </h3>
+<p class="font-body-sm text-body-sm text-text-secondary mt-0.5">Global AI Alliance</p>
+<!-- Event Date Pill -->
+<div class="mt-space-sm flex items-center gap-space-xs px-space-sm py-1 rounded-lg bg-surface-container-low text-text-secondary">
+<span class="material-symbols-outlined text-[16px] text-text-secondary">event</span>
+<span class="font-label-sm text-label-sm">Event Date: May 2, 2025</span>
+</div>
+<!-- Stage & Meeting Details -->
+<div class="mt-space-md pt-space-sm flex flex-col gap-space-xs bg-surface-container-lowest rounded-lg p-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-text-secondary">Current Stage</span>
+<span class="font-label-sm text-label-sm font-semibold text-text-primary">Team Formation &amp; Pitch</span>
+</div>
+<div class="flex items-start gap-space-xs mt-1 p-space-xs rounded bg-surface-container-low">
+<span class="material-symbols-outlined text-[18px] text-primary flex-shrink-0 mt-0.5">video_camera_front</span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm font-semibold text-text-primary">Orientation Sync</span>
+<span class="font-code-sm text-code-sm text-text-secondary">Tuesday, April 8 · 11:00 AM EST</span>
+</div>
+</div>
+</div>
+<!-- Card Actions & Outcomes -->
+<div class="mt-space-md pt-space-sm flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<button class="font-label-sm text-label-sm text-text-secondary hover:text-text-primary flex items-center gap-1 transition-colors" type="button">
+<span>View Team</span>
+<span class="material-symbols-outlined text-[14px]">groups</span>
+</button>
+<span class="font-code-sm text-code-sm text-text-secondary">3 Members</span>
+</div>
+<div class="grid grid-cols-2 gap-space-xs mt-1">
+<button class="flex items-center justify-center gap-1 px-space-xs py-1 rounded-lg bg-status-eligible-bg text-status-eligible hover:opacity-90 font-label-sm text-label-sm transition-opacity" type="button">
+<span class="material-symbols-outlined text-[14px]">check</span>
+<span>Accepted</span>
+</button>
+<button class="flex items-center justify-center gap-1 px-space-xs py-1 rounded-lg bg-status-ineligible-bg text-status-ineligible hover:opacity-90 font-label-sm text-label-sm transition-opacity" type="button">
+<span class="material-symbols-outlined text-[14px]">close</span>
+<span>Decline</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Column 5: Decision / Accepted (Empty State) -->
+<div class="flex flex-col rounded-xl bg-surface-container-low p-space-sm shadow-sm min-h-[580px]">
+<div class="flex items-center justify-between px-space-xs py-space-xs mb-space-sm">
+<div class="flex items-center gap-space-xs">
+<div class="w-2.5 h-2.5 rounded-full bg-status-eligible"></div>
+<span class="font-headline-sm text-headline-sm text-text-primary">Decision</span>
+<span class="px-2 py-0.5 rounded-full font-code-sm text-code-sm bg-surface-card text-text-secondary shadow-sm">0</span>
+</div>
+<button class="text-text-secondary hover:text-text-primary p-1 rounded hover:bg-surface-card transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">more_horiz</span>
+</button>
+</div>
+<!-- Clean Empty Container -->
+<div class="flex flex-col items-center justify-center text-center p-space-lg rounded-xl bg-surface-card flex-1 shadow-sm">
+<div class="w-14 h-14 rounded-full bg-surface-container-low flex items-center justify-center text-primary mb-space-sm">
+<span class="material-symbols-outlined text-[28px]">award_star</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-text-primary">No accepted offers yet</h4>
+<p class="font-body-sm text-body-sm text-text-secondary mt-space-xs max-w-[200px]">
+          Keep momentum on your active submissions! Offers will land here once confirmed by host organizations.
+        </p>
+<div class="mt-space-md w-full pt-space-md">
+<div class="p-space-xs rounded-lg bg-surface-container-low flex items-center justify-center gap-1 text-text-secondary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">bolt</span>
+<span>Target: 2 offers by June</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Actions & Pipeline Intelligence Section -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- Recent Status Updates Log (7 Cols) -->
+<div class="lg:col-span-7 flex flex-col rounded-xl bg-surface-card p-space-lg shadow-sm">
+<div class="flex items-center justify-between mb-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">history</span>
+</div>
+<div class="flex flex-col">
+<h3 class="font-headline-sm text-headline-sm text-text-primary">Recent Status Updates</h3>
+<span class="font-body-sm text-body-sm text-text-secondary">Chronological event ledger and stage transitions</span>
+</div>
+</div>
+<span class="font-code-sm text-code-sm text-text-secondary px-space-sm py-1 rounded bg-surface-container-low">Auto-logged</span>
+</div>
+<!-- Timeline Items -->
+<div class="flex flex-col gap-space-md relative pl-6">
+<!-- Connecting Line -->
+<div class="absolute left-2.5 top-2 bottom-2 w-0.5 bg-surface-container"></div>
+<!-- Event 1 -->
+<div class="flex items-start gap-space-sm relative">
+<div class="w-5 h-5 rounded-full bg-primary flex items-center justify-center text-on-primary text-[10px] -ml-6 z-10 shadow-sm">
+<span class="material-symbols-outlined text-[12px]">send</span>
+</div>
+<div class="flex flex-col flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md font-semibold text-text-primary">MIT Media Lab Application Submitted</span>
+<span class="font-code-sm text-code-sm text-text-secondary">Yesterday · 4:15 PM</span>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary mt-0.5">
+              Portal confirmation #APP-8842-ML acknowledged. Direct profile verification synchronized with admissions database.
+            </p>
+</div>
+</div>
+<!-- Event 2 -->
+<div class="flex items-start gap-space-sm relative">
+<div class="w-5 h-5 rounded-full bg-status-potential flex items-center justify-center text-on-primary text-[10px] -ml-6 z-10 shadow-sm">
+<span class="material-symbols-outlined text-[12px]">calendar_month</span>
+</div>
+<div class="flex flex-col flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md font-semibold text-text-primary">Hackathon Orientation Sync Scheduled</span>
+<span class="font-code-sm text-code-sm text-text-secondary">March 14 · 10:20 AM</span>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary mt-0.5">
+              Global AI Alliance confirmed team registration and scheduled mentor matching call for April 8 at 11:00 AM EST.
+            </p>
+</div>
+</div>
+<!-- Event 3 -->
+<div class="flex items-start gap-space-sm relative">
+<div class="w-5 h-5 rounded-full bg-status-eligible flex items-center justify-center text-on-primary text-[10px] -ml-6 z-10 shadow-sm">
+<span class="material-symbols-outlined text-[12px]">task_alt</span>
+</div>
+<div class="flex flex-col flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md font-semibold text-text-primary">Transcript Pre-verification Passed</span>
+<span class="font-code-sm text-code-sm text-text-secondary">March 12 · 2:45 PM</span>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary mt-0.5">
+              Institutional GPA verification (3.88 cumulative) finalized for Quantum Computing Summer Research.
+            </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Upcoming Milestone Alerts & Calendar Sync (5 Cols) -->
+<div class="lg:col-span-5 flex flex-col justify-between rounded-xl bg-surface-card p-space-lg shadow-sm">
+<div class="flex flex-col">
+<div class="flex items-center justify-between mb-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">notification_important</span>
+</div>
+<div class="flex flex-col">
+<h3 class="font-headline-sm text-headline-sm text-text-primary">Milestone Alerts</h3>
+<span class="font-body-sm text-body-sm text-text-secondary">Urgent submission deadlines</span>
+</div>
+</div>
+<span class="px-space-sm py-0.5 rounded-full font-label-sm text-label-sm bg-status-potential-bg text-status-potential font-semibold">2 Critical</span>
+</div>
+<!-- Alert Items -->
+<div class="flex flex-col gap-space-sm">
+<div class="p-space-sm rounded-xl bg-surface-container-low flex items-start justify-between gap-space-sm">
+<div class="flex items-start gap-space-xs min-w-0">
+<span class="material-symbols-outlined text-status-potential text-[20px] flex-shrink-0 mt-0.5">warning</span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md font-semibold text-text-primary truncate">Profile Verification Deadline</span>
+<span class="font-body-sm text-body-sm text-text-secondary truncate">Civic Tech Fellowship · Due in 9 days</span>
+</div>
+</div>
+<button class="px-space-sm py-1 rounded bg-surface-card text-primary font-label-sm text-label-sm shadow-sm hover:bg-surface-container transition-colors flex-shrink-0" type="button">
+              Resolve
+            </button>
+</div>
+<div class="p-space-sm rounded-xl bg-surface-container-low flex items-start justify-between gap-space-sm">
+<div class="flex items-start gap-space-xs min-w-0">
+<span class="material-symbols-outlined text-primary text-[20px] flex-shrink-0 mt-0.5">alarm</span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md font-semibold text-text-primary truncate">Final Application Cutoff</span>
+<span class="font-body-sm text-body-sm text-text-secondary truncate">Frontier Physics · Due in 14 days</span>
+</div>
+</div>
+<button class="px-space-sm py-1 rounded bg-surface-card text-primary font-label-sm text-label-sm shadow-sm hover:bg-surface-container transition-colors flex-shrink-0" type="button">
+              Review
+            </button>
+</div>
+</div>
+</div>
+<!-- Calendar Sync Action Banner -->
+<div class="mt-space-md p-space-sm rounded-xl bg-surface-container flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[24px]">sync</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm font-semibold text-text-primary">Sync to Google / Outlook Calendar</span>
+<span class="font-body-sm text-body-sm text-text-secondary">Automate deadline alerts on mobile</span>
+</div>
+</div>
+<button class="px-space-md py-1.5 rounded-lg bg-surface-card text-text-primary hover:text-primary font-label-sm text-label-sm shadow-sm transition-colors whitespace-nowrap" type="button">
+          Connect iCal
+        </button>
+</div>
+</div>
+</div>
+</div></main></div></body></html>

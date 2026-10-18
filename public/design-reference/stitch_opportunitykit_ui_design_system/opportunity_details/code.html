@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-primary-fixed":"#140067","surface-bg":"#F7F8FC","dark-text-secondary":"#B8C2D9","status-unknown-bg":"#F3F4F6","on-tertiary":"#ffffff","surface-tint":"#5545da","tertiary-fixed":"#e4e0f4","dark-text-body":"#D7DEEB","outline-variant":"#c8c4d7","error-container":"#ffdad6","status-eligible-bg":"#ECFDF5","background":"#f9f9ff","surface-card":"#FFFFFF","inverse-surface":"#223149","status-ineligible":"#EF4444","text-primary":"#17213A","on-primary-fixed-variant":"#3c26c2","primary-container":"#6254e8","tertiary-fixed-dim":"#c8c4d7","text-secondary":"#596780","on-tertiary-fixed-variant":"#464555","primary":"#4937cf","status-eligible":"#10B981","on-primary-container":"#efebff","surface-container":"#e8eeff","on-secondary-fixed":"#261a00","on-tertiary-fixed":"#1b1a28","tertiary-container":"#6b697a","on-surface-variant":"#474555","dark-primary":"#9387FF","surface-dim":"#ccdafa","on-error":"#ffffff","surface-container-high":"#dfe8ff","tertiary":"#535161","surface":"#f9f9ff","error":"#ba1a1a","status-potential-bg":"#FFFBEB","secondary-container":"#fdd88c","border-subtle":"#E3E7F0","on-secondary":"#ffffff","on-surface":"#0c1c33","on-primary":"#ffffff","primary-fixed":"#e3dfff","dark-border":"#344158","on-tertiary-container":"#eeeafe","surface-container-lowest":"#ffffff","dark-bg":"#111827","secondary-fixed":"#ffdf9e","primary-fixed-dim":"#c5c0ff","status-potential":"#F59E0B","dark-text-primary":"#F7F8FC","secondary-fixed-dim":"#e5c278","dark-card":"#202B3D","surface-container-highest":"#d6e3ff","outline":"#787586","dark-surface":"#182235","inverse-on-surface":"#ecf0ff","surface-container-low":"#f0f3ff","dark-secondary":"#D6B779","on-secondary-container":"#785d1d","surface-bright":"#f9f9ff","inverse-primary":"#c5c0ff","secondary":"#755a1b","on-background":"#0c1c33","surface-variant":"#d6e3ff","on-error-container":"#93000a","on-secondary-fixed-variant":"#5b4302","status-unknown":"#6B7280","status-ineligible-bg":"#FEF2F2"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{"space-sm":"0.5rem","space-xs":"0.25rem","space-md":"1rem","space-lg":"1.5rem","margin-desktop":"2.5rem","margin-tablet":"1.5rem","space-xl":"2.25rem","gutter-desktop":"1.75rem",gutter:"1.25rem",margin:"1rem"},fontFamily:{"headline-xl-mobile":["Plus Jakarta Sans"],"code-sm":["JetBrains Mono"],"headline-lg":["Plus Jakarta Sans"],"headline-lg-mobile":["Plus Jakarta Sans"],"body-md":["Inter"],"body-sm":["Inter"],"headline-xl":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"label-md":["Inter"],"body-lg":["Inter"],"label-sm":["Inter"]},fontSize:{"headline-xl-mobile":["1.75rem",{lineHeight:"2.25rem",letterSpacing:"-0.02em",fontWeight:"700"}],"code-sm":["0.75rem",{lineHeight:"1rem",fontWeight:"500"}],"headline-lg":["1.75rem",{lineHeight:"2.25rem",letterSpacing:"-0.02em",fontWeight:"600"}],"headline-lg-mobile":["1.375rem",{lineHeight:"1.75rem",letterSpacing:"-0.015em",fontWeight:"600"}],"body-md":["0.875rem",{lineHeight:"1.375rem",fontWeight:"400"}],"body-sm":["0.8125rem",{lineHeight:"1.25rem",fontWeight:"400"}],"headline-xl":["2.25rem",{lineHeight:"2.75rem",letterSpacing:"-0.025em",fontWeight:"700"}],"headline-sm":["1.125rem",{lineHeight:"1.5rem",fontWeight:"600"}],"headline-md":["1.25rem",{lineHeight:"1.625rem",letterSpacing:"-0.01em",fontWeight:"600"}],"label-md":["0.875rem",{lineHeight:"1.25rem",fontWeight:"500"}],"body-lg":["1rem",{lineHeight:"1.625rem",fontWeight:"400"}],"label-sm":["0.75rem",{lineHeight:"1rem",letterSpacing:"0.025em",fontWeight:"600"}]}}}}</script></head><body class="bg-surface-bg font-body-md text-text-primary antialiased min-h-screen"><aside class="fixed left-0 top-0 h-full w-80 bg-surface-card z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col"><div class="px-space-lg pt-space-lg pb-space-md flex items-center gap-space-sm"><img alt="OpportunityKit Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1WR0UqJnQmU2S-QCW8DaFqWRLpWvcCY1dtzxBZINhbXfSUON62Dkf-YXaauYqwWsQLKWDdGqoZE0_tFxmzJ2gdCVX4_eLwSOTdXK-MzsDPLpN016dcMZc1nQz36vvtfm2ArlpKcsMbkMHbXgRKvoBwGb0WQLs5RAL_eHU7w0qQ5YRL6jUk5scyVlEehBeQb4aa68ZNnHuFDXSsM4xQhfVko1IlP1jTZ1T-f4-fjiCG-K3zr7--gbSIR8g"/><div class="flex flex-col min-w-0"><span class="font-headline-sm text-headline-sm text-text-primary leading-tight tracking-tight">OpportunityKit</span><span class="font-label-sm text-label-sm text-text-secondary tracking-normal">Student Discovery Hub</span></div></div><div class="px-space-md pt-space-sm"><span class="px-space-sm font-label-sm text-label-sm uppercase tracking-wider text-text-secondary opacity-75">Platform</span></div><nav class="flex flex-col gap-space-xs px-space-md pt-space-xs" data-active-classes="bg-primary-container text-on-primary-container font-headline-sm rounded-lg"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-text-secondary font-label-md text-label-md hover:bg-surface-container hover:text-on-surface transition-all" data-path="overview" href="#"><span class="material-symbols-outlined text-[20px]">dashboard</span><span>Overview</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-text-secondary font-label-md text-label-md hover:bg-surface-container hover:text-on-surface transition-all" data-path="discover-opportunities" href="#"><span class="material-symbols-outlined text-[20px]">explore</span><span>Discover Opportunities</span></a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-space-sm transition-all bg-primary-container text-on-primary-container font-headline-sm rounded-lg" data-path="opportunity-details" href="#"><span class="material-symbols-outlined text-[20px]">auto_awesome</span><span>Opportunity Details</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-text-secondary font-label-md text-label-md hover:bg-surface-container hover:text-on-surface transition-all" data-path="saved-opportunities" href="#"><span class="material-symbols-outlined text-[20px]">bookmark</span><span>Saved Opportunities</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-text-secondary font-label-md text-label-md hover:bg-surface-container hover:text-on-surface transition-all" data-path="application-tracker" href="#"><span class="material-symbols-outlined text-[20px]">fact_check</span><span>Application Tracker</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-text-secondary font-label-md text-label-md hover:bg-surface-container hover:text-on-surface transition-all" data-path="student-profile" href="#"><span class="material-symbols-outlined text-[20px]">person</span><span>Student Profile</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-text-secondary font-label-md text-label-md hover:bg-surface-container hover:text-on-surface transition-all" data-path="ai-fit-reports-and-settings" href="#"><span class="material-symbols-outlined text-[20px]">tune</span><span>AI Fit Reports &amp; Settings</span></a></nav></div><div class="p-space-md flex flex-col gap-space-sm"><div class="flex items-center justify-between px-space-sm py-space-xs rounded-lg bg-surface-container-low"><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-text-secondary text-[18px]">light_mode</span><span class="font-label-sm text-label-sm text-text-secondary">Appearance</span></div><div class="flex items-center gap-space-xs p-0.5 rounded-full bg-surface-card"><button class="px-space-sm py-0.5 rounded-full font-label-sm text-label-sm bg-primary text-on-primary shadow-sm" type="button">Light</button><button class="px-space-sm py-0.5 rounded-full font-label-sm text-label-sm text-text-secondary hover:text-on-surface transition-colors" type="button">Dark</button></div></div><div class="p-space-md rounded-xl bg-surface-container-low flex flex-col gap-space-sm shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center gap-space-sm"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-ujMXh1eBRDuRQLXT8-6Vvewud-VPQ2_Gh9CiSdEhKS1iP6Bt6_24CONchXvafjcWdbZm6dYBPpDKUH4-f3drtcvrGBZ3-Dr0jGXyazz_gW1H-D8aI3U6w3RLSD2kQdUxaOdCB3QZnvf7XLCts5_0JJiBjqwrokJlvqTP6wis6gzUyn3r4dWwAxvSFGmNqjvtl1sKAUGUa23YRd_rdaUqvWTkhVnBiMTfGFby9dAe30OhVo4pKRbM"/><div class="flex flex-col min-w-0"><span class="font-label-md text-label-md font-semibold text-text-primary truncate">Maya Lin</span><span class="font-body-sm text-body-sm text-text-secondary truncate">Computer Science, Jr.</span></div></div><div class="flex items-center justify-between pt-space-xs"><span class="inline-flex items-center px-space-sm py-0.5 rounded-full font-label-sm text-label-sm bg-status-eligible-bg text-status-eligible">Profile 85% complete</span><span class="material-symbols-outlined text-text-secondary text-[18px] hover:text-primary cursor-pointer transition-colors">arrow_forward</span></div></div></div></aside><div class="pl-80"><header class="fixed top-0 left-80 right-0 h-16 bg-surface-card/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-margin-desktop"><div class="flex items-center gap-space-md flex-1 max-w-xl"><div class="relative w-full max-w-md"><span class="material-symbols-outlined absolute left-space-sm top-1/2 -translate-y-1/2 text-text-secondary text-[20px]">search</span><input class="w-full pl-9 pr-space-md py-1.5 rounded-lg bg-surface-container-low font-body-sm text-body-sm text-text-primary placeholder-text-secondary focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="Search scholarships, fellowships, grants..." type="text"/></div></div><div class="flex items-center gap-space-md"><div class="hidden sm:flex items-center gap-space-xs"><span class="inline-flex items-center px-space-sm py-0.5 rounded-full font-label-sm text-label-sm bg-primary-fixed text-on-primary-fixed">Fall 2025 Match Cycle</span></div><button class="p-space-xs rounded-lg text-text-secondary hover:bg-surface-container-low hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span></button><button class="p-space-xs rounded-lg text-text-secondary hover:bg-surface-container-low hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">help_outline</span></button></div></header><main class="w-full pt-16 px-margin-desktop py-space-xl bg-surface-bg"><div class="flex flex-col w-full">
+<!-- Sub-header Breadcrumb & Quick Action Strip -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md pb-space-lg">
+<div class="flex items-center gap-space-sm flex-wrap">
+<a class="inline-flex items-center gap-space-xs text-text-secondary hover:text-primary transition-colors font-label-md text-label-md group" href="#">
+<span class="material-symbols-outlined text-[18px] group-hover:-translate-x-0.5 transition-transform">arrow_back</span>
+<span>Back to Discovery</span>
+</a>
+<span class="text-outline-variant font-code-sm text-code-sm">/</span>
+<span class="font-label-sm text-label-sm text-text-secondary">Discover Opportunities</span>
+<span class="text-outline-variant font-code-sm text-code-sm">/</span>
+<span class="font-label-sm text-label-sm text-text-primary font-semibold truncate max-w-xs md:max-w-md">Civic Tech Innovation Fellowship 2025</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<button class="inline-flex items-center gap-space-xs px-space-md py-2 rounded-lg bg-surface-card hover:bg-surface-container text-text-primary shadow-sm transition-all font-label-md text-label-md active:scale-95" id="bookmark-btn" type="button">
+<span class="material-symbols-outlined text-primary text-[20px]" id="bookmark-icon">bookmark_border</span>
+<span id="bookmark-text">Save Opportunity</span>
+</button>
+<div class="relative group">
+<button class="inline-flex items-center gap-space-xs px-space-lg py-2 rounded-lg bg-primary hover:bg-primary-container text-on-primary shadow-sm hover:shadow-md transition-all font-label-md text-label-md active:scale-95" id="apply-btn" type="button">
+<span>Apply on Official Site</span>
+<span class="material-symbols-outlined text-[18px]">open_in_new</span>
+</button>
+<!-- Tooltip pill for demo notice -->
+<div class="absolute right-0 top-full mt-2 hidden group-hover:flex flex-col w-64 p-space-sm bg-inverse-surface text-inverse-on-surface text-[11px] rounded-lg shadow-xl z-30 pointer-events-none">
+<span class="font-semibold text-secondary-container">Demonstration Mode</span>
+<span>External submission is simulated for the Fall 2025 Match Cycle preview.</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Hero Header Card with Media Accent & Demo Banner -->
+<div class="rounded-xl bg-surface-card shadow-sm p-space-lg lg:p-space-xl mb-space-xl relative overflow-hidden">
+<!-- Subtle architectural background glow -->
+<div class="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-gradient-to-br from-primary-fixed-dim/30 to-surface-tint/5 blur-3xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col gap-space-md">
+<!-- Demo Disclaimer Ribbon -->
+<div class="inline-flex items-center gap-space-xs px-space-sm py-1 rounded-md bg-secondary-container/30 text-on-secondary-fixed text-label-sm font-label-sm self-start">
+<span class="material-symbols-outlined text-[16px] text-secondary">info</span>
+<span>DEMO DATA — NOT A REAL OPPORTUNITY. For demonstration purposes only; no actual application is being collected.</span>
+</div>
+<!-- Main Title Block & Emblem -->
+<div class="flex flex-col lg:flex-row lg:items-start justify-between gap-space-lg pt-space-xs">
+<div class="flex items-start gap-space-md">
+<div class="w-16 h-16 rounded-xl bg-surface-container flex items-center justify-center shrink-0 shadow-sm overflow-hidden p-2">
+<span class="material-symbols-outlined text-primary text-[34px]" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-headline-sm text-headline-sm text-text-secondary">Open Tech Institute</span>
+<span class="inline-flex items-center gap-0.5 text-status-eligible" title="Verified Institutional Partner">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-label-sm text-label-sm text-status-eligible font-semibold">Verified Partner</span>
+</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-text-primary tracking-tight mt-0.5">
+              Civic Tech Innovation Fellowship 2025
+            </h1>
+</div>
+</div>
+<!-- Urgency Deadline Pill -->
+<div class="flex items-center self-start gap-space-sm px-space-md py-2 rounded-lg bg-status-potential-bg text-on-surface shadow-sm">
+<span class="material-symbols-outlined text-status-potential text-[20px] animate-pulse">timer</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-text-secondary">Deadline</span>
+<span class="font-headline-sm text-headline-sm text-text-primary leading-none">March 28, 2025 <span class="text-status-potential font-label-sm">(12 days remaining)</span></span>
+</div>
+</div>
+</div>
+<!-- Meta Badges Line -->
+<div class="flex flex-wrap items-center gap-space-sm pt-space-xs">
+<span class="inline-flex items-center gap-1.5 px-space-md py-1 rounded-full bg-tertiary-fixed text-primary font-label-sm text-label-sm font-semibold">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+          Fellowship
+        </span>
+<span class="inline-flex items-center gap-1 px-space-md py-1 rounded-full bg-surface-container-low text-text-secondary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+          Remote / Hybrid (Boston, MA)
+        </span>
+<span class="inline-flex items-center gap-1 px-space-md py-1 rounded-full bg-surface-container-low text-text-secondary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+          Summer 2025 (10 Weeks)
+        </span>
+<span class="inline-flex items-center gap-1 px-space-md py-1 rounded-full bg-status-eligible-bg text-status-eligible font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[16px]">payments</span>
+          $7,500 Living Stipend
+        </span>
+</div>
+</div>
+</div>
+<!-- Two-Column Asymmetric Grid (65% Main Content, 35% Deterministic Engine) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-start">
+<!-- LEFT COLUMN: Opportunity Dossier (lg:col-span-8 approx 66%) -->
+<div class="lg:col-span-8 flex flex-col gap-space-lg">
+<!-- Section 1: Overview Card -->
+<div class="rounded-xl bg-surface-card p-space-lg lg:p-space-xl shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center gap-space-sm pb-space-xs">
+<span class="material-symbols-outlined text-primary text-[24px]">flag</span>
+<h2 class="font-headline-md text-headline-md text-text-primary">Program Overview</h2>
+</div>
+<p class="font-body-lg text-body-lg text-text-primary leading-relaxed">
+          The Civic Tech Innovation Fellowship is a premier intensive designed to bridge algorithmic fairness, open government data infrastructure, and emerging student engineering talent. Over 10 immersive summer weeks, fellows collaborate with municipal data leads and senior policy engineers to architect transparent computational tooling for public equity.
+        </p>
+<!-- Media Vignette Context -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md my-space-xs">
+<div class="relative rounded-xl overflow-hidden shadow-sm h-48 bg-surface-container-low">
+<img class="w-full h-full object-cover" data-alt="A modern research lab with young computer science students and engineers collaborating over data visualizations on dual screen workstations in Boston, morning ambient sunlight, cinematic depth of field, high-end professional student technology studio." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXyrHVgnBXVU5lsiR-acxNeOXo0QTagYCm1qP3T5MgFHzdQlkA_2Lz71_oaQF_ovHaT4VE22HoJYfDIcUYDwJc6QLy7tT2OUFS37qXKNVZlqhLjgj090hG89GBaexzRNYRZTp2H3Iqloi_ya8RBU99v4SE2bvYrCCTtaN9ziMZl1Lr9Lo_EiucC0tZvRcLiXRfLZxvz9IcqgII6OHV5FQI3k-PrIGSEGcYwwOIS6aBZsh1VItze24U"/>
+<div class="absolute inset-0 bg-gradient-to-t from-text-primary/70 via-transparent to-transparent flex items-end p-space-md">
+<span class="text-on-primary font-label-sm text-label-sm font-medium">Urban Open Data Lab — Boston Cohort</span>
+</div>
+</div>
+<div class="relative rounded-xl overflow-hidden shadow-sm h-48 bg-surface-container-low">
+<img class="w-full h-full object-cover" data-alt="Technical workspace with architectural blueprint diagrams of algorithmic models on glass boards, Python code scripts on laptop screen, modern university fellowship setting, deep purple and clean slate accents, documentary style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJS0MBbWBeq42iAFA2rxFxtTCyVV58euYwTYHOoMwwJImdpPWgAWk91njfrW_05KIreu4kgvplUf_X1aTInHlNZp_aIn8WmlfUntaVFqxpX4pgNMZCn8l3LaezQCUrhNJsP1qc2tqttph_qBTwrh5LfRC93feh826faHSQ7qeaK6U51KDYQ46yoXjyCUnx438fFKTDgNCoSTL376O2QfbwnV2Hs1vS-MYn5TKQwSzt1Xq6RpS8xz0P"/>
+<div class="absolute inset-0 bg-gradient-to-t from-text-primary/70 via-transparent to-transparent flex items-end p-space-md">
+<span class="text-on-primary font-label-sm text-label-sm font-medium">Algorithmic Auditing Sprint Sessions</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md pt-space-xs">
+<div class="p-space-md rounded-lg bg-surface-container-low flex flex-col gap-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-text-secondary">Commitment</span>
+<span class="font-headline-sm text-headline-sm text-text-primary">30 hrs / week</span>
+<span class="font-body-sm text-body-sm text-text-secondary">Direct project build &amp; standups</span>
+</div>
+<div class="p-space-md rounded-lg bg-surface-container-low flex flex-col gap-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-text-secondary">Mentorship</span>
+<span class="font-headline-sm text-headline-sm text-text-primary">1-on-1 Guidance</span>
+<span class="font-body-sm text-body-sm text-text-secondary">Paired with Senior Policy Leads</span>
+</div>
+<div class="p-space-md rounded-lg bg-surface-container-low flex flex-col gap-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-text-secondary">Deliverable</span>
+<span class="font-headline-sm text-headline-sm text-text-primary">Open Source Release</span>
+<span class="font-body-sm text-body-sm text-text-secondary">Public GitHub library &amp; whitepaper</span>
+</div>
+</div>
+</div>
+<!-- Section 2: Eligibility Requirements -->
+<div class="rounded-xl bg-surface-card p-space-lg lg:p-space-xl shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[24px]">verified_user</span>
+<h2 class="font-headline-md text-headline-md text-text-primary">Eligibility Requirements</h2>
+</div>
+<span class="font-code-sm text-code-sm text-text-secondary">DETERMINISTIC VERIFICATION</span>
+</div>
+<ul class="flex flex-col gap-space-sm">
+<li class="flex items-start gap-space-sm p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-status-eligible text-[20px] mt-0.5">check_circle</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-text-primary font-semibold">Academic Standing</span>
+<span class="font-body-md text-body-md text-text-secondary">Must be enrolled in an accredited undergraduate degree with Junior or Senior standing as of June 2025.</span>
+</div>
+</li>
+<li class="flex items-start gap-space-sm p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-status-eligible text-[20px] mt-0.5">check_circle</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-text-primary font-semibold">Technical Foundation</span>
+<span class="font-body-md text-body-md text-text-secondary">Demonstrated experience writing clean Python code and navigating Git collaborative workflows.</span>
+</div>
+</li>
+<li class="flex items-start gap-space-sm p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-status-eligible text-[20px] mt-0.5">check_circle</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-text-primary font-semibold">Program Commitment</span>
+<span class="font-body-md text-body-md text-text-secondary">Ability to commit 30 hours per week during the 10-week summer cycle (June 9 – August 15, 2025).</span>
+</div>
+</li>
+<li class="flex items-start gap-space-sm p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-status-eligible text-[20px] mt-0.5">check_circle</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-text-primary font-semibold">Work Authorization</span>
+<span class="font-body-md text-body-md text-text-secondary">US authorization, CPT/OPT eligibility, or a valid educational visa qualifying for remote educational stipend disbursement.</span>
+</div>
+</li>
+</ul>
+</div>
+<!-- Section 3: Skills & Technical Stack -->
+<div class="rounded-xl bg-surface-card p-space-lg lg:p-space-xl shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center gap-space-sm pb-space-xs">
+<span class="material-symbols-outlined text-primary text-[24px]">terminal</span>
+<h2 class="font-headline-md text-headline-md text-text-primary">Skills &amp; Qualifications</h2>
+</div>
+<div class="flex flex-col gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-text-secondary font-semibold">Required Stack</span>
+<div class="flex flex-wrap gap-space-xs">
+<span class="inline-flex items-center gap-1.5 px-space-md py-1.5 rounded-lg bg-primary-fixed text-on-primary-fixed font-code-sm text-code-sm">
+<span class="material-symbols-outlined text-[14px]">code</span> Python
+              </span>
+<span class="inline-flex items-center gap-1.5 px-space-md py-1.5 rounded-lg bg-primary-fixed text-on-primary-fixed font-code-sm text-code-sm">
+<span class="material-symbols-outlined text-[14px]">database</span> SQL
+              </span>
+<span class="inline-flex items-center gap-1.5 px-space-md py-1.5 rounded-lg bg-primary-fixed text-on-primary-fixed font-code-sm text-code-sm">
+<span class="material-symbols-outlined text-[14px]">fork_right</span> Git
+              </span>
+<span class="inline-flex items-center gap-1.5 px-space-md py-1.5 rounded-lg bg-primary-fixed text-on-primary-fixed font-code-sm text-code-sm">
+<span class="material-symbols-outlined text-[14px]">bar_chart</span> Data Visualization
+              </span>
+<span class="inline-flex items-center gap-1.5 px-space-md py-1.5 rounded-lg bg-primary-fixed text-on-primary-fixed font-code-sm text-code-sm">
+<span class="material-symbols-outlined text-[14px]">api</span> REST APIs
+              </span>
+</div>
+</div>
+<div class="flex flex-col gap-space-xs pt-space-xs">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-text-secondary font-semibold">Preferred &amp; Bonus proficiencies</span>
+<div class="flex flex-wrap gap-space-xs">
+<span class="inline-flex items-center gap-1.5 px-space-md py-1.5 rounded-lg bg-surface-container-low text-text-primary font-code-sm text-code-sm">FastAPI</span>
+<span class="inline-flex items-center gap-1.5 px-space-md py-1.5 rounded-lg bg-surface-container-low text-text-primary font-code-sm text-code-sm">Open Data Standards (DCAT)</span>
+<span class="inline-flex items-center gap-1.5 px-space-md py-1.5 rounded-lg bg-surface-container-low text-text-primary font-code-sm text-code-sm">Technical Writing</span>
+<span class="inline-flex items-center gap-1.5 px-space-md py-1.5 rounded-lg bg-surface-container-low text-text-primary font-code-sm text-code-sm">Docker</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 4: Important Dates & Milestones (Timeline) -->
+<div class="rounded-xl bg-surface-card p-space-lg lg:p-space-xl shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[24px]">event_repeat</span>
+<h2 class="font-headline-md text-headline-md text-text-primary">Timeline &amp; Milestones</h2>
+</div>
+<span class="font-label-sm text-label-sm text-text-secondary">EST Timezone</span>
+</div>
+<!-- Vertical Milestones Component -->
+<div class="relative pl-6 flex flex-col gap-space-md">
+<!-- Timeline Vertical Bar -->
+<div class="absolute left-2.5 top-2 bottom-2 w-0.5 bg-surface-container-high"></div>
+<!-- Item 1: Past -->
+<div class="relative flex items-start gap-space-md group">
+<div class="absolute -left-6 top-1 w-5 h-5 rounded-full bg-surface-card flex items-center justify-center">
+<div class="w-3 h-3 rounded-full bg-status-eligible"></div>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-md text-label-md text-text-primary font-semibold">Applications Opened</span>
+<span class="font-code-sm text-code-sm text-text-secondary">— Jan 15, 2025</span>
+</div>
+<span class="font-body-sm text-body-sm text-text-secondary">Cycle formally published across universities.</span>
+</div>
+</div>
+<!-- Item 2: Active / Impending -->
+<div class="relative flex items-start gap-space-md group">
+<div class="absolute -left-6 top-1 w-5 h-5 rounded-full bg-surface-card flex items-center justify-center">
+<div class="w-3.5 h-3.5 rounded-full bg-status-potential animate-ping absolute opacity-75"></div>
+<div class="w-3 h-3 rounded-full bg-status-potential relative"></div>
+</div>
+<div class="flex flex-col p-space-sm rounded-lg bg-status-potential-bg">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-md text-label-md text-text-primary font-bold">Application Deadline</span>
+<span class="font-code-sm text-code-sm font-semibold text-status-potential">— March 28, 2025 (11:59 PM EST)</span>
+</div>
+<span class="font-body-sm text-body-sm text-text-secondary">Portals lock strictly at midnight. Early submissions receive expedited triage.</span>
+</div>
+</div>
+<!-- Item 3: Future -->
+<div class="relative flex items-start gap-space-md group">
+<div class="absolute -left-6 top-1 w-5 h-5 rounded-full bg-surface-card flex items-center justify-center">
+<div class="w-3 h-3 rounded-full bg-surface-container-highest"></div>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-md text-label-md text-text-primary font-semibold">Technical &amp; Policy Interviews</span>
+<span class="font-code-sm text-code-sm text-text-secondary">— April 10–14, 2025</span>
+</div>
+<span class="font-body-sm text-body-sm text-text-secondary">45-minute virtual technical review and fit conversation.</span>
+</div>
+</div>
+<!-- Item 4: Future -->
+<div class="relative flex items-start gap-space-md group">
+<div class="absolute -left-6 top-1 w-5 h-5 rounded-full bg-surface-card flex items-center justify-center">
+<div class="w-3 h-3 rounded-full bg-surface-container-highest"></div>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-md text-label-md text-text-primary font-semibold">Final Notification</span>
+<span class="font-code-sm text-code-sm text-text-secondary">— April 25, 2025</span>
+</div>
+<span class="font-body-sm text-body-sm text-text-secondary">Offers extended with 1-week acceptance window.</span>
+</div>
+</div>
+<!-- Item 5: Future -->
+<div class="relative flex items-start gap-space-md group">
+<div class="absolute -left-6 top-1 w-5 h-5 rounded-full bg-surface-card flex items-center justify-center">
+<div class="w-3 h-3 rounded-full bg-primary"></div>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-md text-label-md text-primary font-bold">Program Commencement</span>
+<span class="font-code-sm text-code-sm text-text-secondary">— June 9, 2025</span>
+</div>
+<span class="font-body-sm text-body-sm text-text-secondary">Virtual orientation kickoff followed by hybrid sprint week.</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 5: Application Instructions -->
+<div class="rounded-xl bg-surface-card p-space-lg lg:p-space-xl shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center gap-space-sm pb-space-xs">
+<span class="material-symbols-outlined text-primary text-[24px]">assignment_turned_in</span>
+<h2 class="font-headline-md text-headline-md text-text-primary">Submission Instructions</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between">
+<div class="flex flex-col gap-space-xs">
+<span class="font-code-sm text-code-sm text-primary font-bold">STEP 01</span>
+<span class="font-label-md text-label-md text-text-primary font-semibold">Student Profile &amp; Resume</span>
+<p class="font-body-sm text-body-sm text-text-secondary">Submit verified academic credentials and a one-page technical resume through OpportunityKit.</p>
+</div>
+<div class="pt-space-md flex items-center gap-1 text-status-eligible font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">check</span>
+<span>Ready in Maya's Vault</span>
+</div>
+</div>
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between">
+<div class="flex flex-col gap-space-xs">
+<span class="font-code-sm text-code-sm text-primary font-bold">STEP 02</span>
+<span class="font-label-md text-label-md text-text-primary font-semibold">Statement of Intent</span>
+<p class="font-body-sm text-body-sm text-text-secondary">500 words addressing how you anticipate utilizing civic tech to resolve a local community inequality.</p>
+</div>
+<div class="pt-space-md flex items-center gap-1 text-text-secondary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">edit_document</span>
+<span>Drafting Required</span>
+</div>
+</div>
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between">
+<div class="flex flex-col gap-space-xs">
+<span class="font-code-sm text-code-sm text-primary font-bold">STEP 03</span>
+<span class="font-label-md text-label-md text-text-primary font-semibold">Code Repository Sample</span>
+<p class="font-body-sm text-body-sm text-text-secondary">Provide an active GitHub repository or script snippet showing data parsing or algorithmic analysis.</p>
+</div>
+<div class="pt-space-md flex items-center gap-1 text-status-potential font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">warning</span>
+<span>Needs Link in Profile</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN: Deterministic Eligibility & AI Fit Copilot (lg:col-span-4 approx 34%) -->
+<div class="lg:col-span-4 flex flex-col gap-space-lg sticky top-20">
+<!-- Panel A: Deterministic Python Eligibility Engine -->
+<div class="rounded-xl bg-surface-card p-space-lg shadow-sm flex flex-col gap-space-md border-l-4 border-l-primary relative overflow-hidden">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[20px]">memory</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-text-secondary font-bold">Eligibility Engine</span>
+</div>
+<!-- Verified Tag -->
+<span class="inline-flex items-center gap-1 px-space-sm py-0.5 rounded-full bg-status-eligible-bg text-status-eligible font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-status-eligible"></span>
+            Eligible
+          </span>
+</div>
+<div class="p-space-sm rounded-lg bg-surface-container-low">
+<p class="font-body-sm text-body-sm text-text-primary">
+<span class="font-semibold text-primary">Deterministic Python Engine</span> verified <strong>4 of 4</strong> primary eligibility criteria against Maya Lin's student record.
+          </p>
+</div>
+<!-- Deterministic Breakdown Checklist -->
+<div class="flex flex-col gap-space-xs">
+<!-- Item 1 -->
+<div class="flex items-start justify-between p-2 rounded-lg bg-surface-bg">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-status-eligible text-[18px] mt-0.5">check_circle</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-text-primary font-semibold">Enrolled Undergraduate</span>
+<span class="font-body-sm text-[11px] text-text-secondary">Junior Standing, Computer Science</span>
+</div>
+</div>
+<span class="font-code-sm text-[11px] text-status-eligible font-medium">Verified</span>
+</div>
+<!-- Item 2 -->
+<div class="flex items-start justify-between p-2 rounded-lg bg-surface-bg">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-status-eligible text-[18px] mt-0.5">check_circle</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-text-primary font-semibold">Python Skill Match</span>
+<span class="font-body-sm text-[11px] text-text-secondary">In profile skills (Advanced)</span>
+</div>
+</div>
+<span class="font-code-sm text-[11px] text-status-eligible font-medium">Verified</span>
+</div>
+<!-- Item 3 -->
+<div class="flex items-start justify-between p-2 rounded-lg bg-surface-bg">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-status-eligible text-[18px] mt-0.5">check_circle</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-text-primary font-semibold">Summer 2025 Availability</span>
+<span class="font-body-sm text-[11px] text-text-secondary">30+ hrs/wk availability set</span>
+</div>
+</div>
+<span class="font-code-sm text-[11px] text-status-eligible font-medium">Verified</span>
+</div>
+<!-- Item 4 (Warning/Optional) -->
+<div class="flex items-start justify-between p-2 rounded-lg bg-status-potential-bg">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-status-potential text-[18px] mt-0.5">warning</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-text-primary font-semibold">GitHub Repository Link</span>
+<span class="font-body-sm text-[11px] text-text-secondary">Not connected in Vault</span>
+</div>
+</div>
+<span class="font-code-sm text-[11px] text-status-potential font-medium">Optional</span>
+</div>
+</div>
+<!-- Strict Engine Philosophy Banner -->
+<div class="pt-space-xs text-[11px] text-text-secondary leading-normal flex items-start gap-1.5 opacity-90">
+<span class="material-symbols-outlined text-[16px] text-text-secondary shrink-0">policy</span>
+<span>Eligibility is calculated deterministically via rules engines. AI is not permitted to decide your basic eligibility status.</span>
+</div>
+</div>
+<!-- Panel B: AI Copilot Fit & Narrative Diagnostics -->
+<div class="rounded-xl bg-surface-card p-space-lg shadow-sm flex flex-col gap-space-md relative overflow-hidden">
+<!-- Subtle Top Glow -->
+<div class="absolute top-0 right-0 left-0 h-1 bg-gradient-to-r from-primary via-primary-container to-secondary"></div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]">auto_awesome</span>
+<span class="font-headline-sm text-headline-sm text-text-primary">AI Fit Copilot</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-semibold">Gemini 1.5 Pro</span>
+</div>
+<!-- Fit Gauge Visual -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-headline-xl text-headline-xl text-primary font-bold leading-none">94%</span>
+<span class="font-label-sm text-label-sm font-semibold text-text-primary mt-1">Strong Match Index</span>
+<span class="font-body-sm text-[11px] text-text-secondary">Benchmarked against past accepted cohorts</span>
+</div>
+<!-- Radial Progress Ring SVG -->
+<div class="relative w-16 h-16 shrink-0 flex items-center justify-center">
+<svg class="w-16 h-16 -rotate-90" viewbox="0 0 36 36">
+<path class="text-surface-container-high" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3.5"></path>
+<path class="text-primary" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="94, 100" stroke-linecap="round" stroke-width="3.5"></path>
+</svg>
+<span class="material-symbols-outlined text-primary text-[20px] absolute">trending_up</span>
+</div>
+</div>
+<!-- Why it fits you -->
+<div class="flex flex-col gap-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-text-secondary font-semibold">Why It Fits You</span>
+<p class="font-body-md text-body-md text-text-primary">
+            Your academic background in Computer Science paired with coursework in <em>Ethics in Computing</em> makes you an exceptional candidate for civic data transparency projects.
+          </p>
+</div>
+<!-- Skills Gap / Advisory -->
+<div class="flex flex-col gap-1 p-space-sm rounded-lg bg-surface-container-low">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-status-potential font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">lightbulb</span> Recommended Preparation
+          </span>
+<p class="font-body-sm text-body-sm text-text-secondary">
+            Consider reviewing Open Data Standards (<span class="font-code-sm text-text-primary">GeoJSON</span> / <span class="font-code-sm text-text-primary">DCAT</span>) and civic APIs prior to your second-round interview.
+          </p>
+</div>
+<!-- Tracker Action Call to Action -->
+<div class="pt-space-xs flex flex-col gap-space-sm">
+<div class="flex items-center justify-between text-label-sm font-label-sm text-text-secondary">
+<span>Next Recommended Step:</span>
+<span class="text-primary font-semibold">Stage: Planning</span>
+</div>
+<button class="w-full flex items-center justify-center gap-space-sm py-2.5 px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md shadow-sm hover:shadow transition-all active:scale-[0.99]" id="add-tracker-btn" type="button">
+<span class="material-symbols-outlined text-[20px]" id="tracker-icon">add_task</span>
+<span id="tracker-text">+ Add to Application Tracker</span>
+</button>
+</div>
+</div>
+<!-- Quick Peer Context Card -->
+<div class="rounded-xl bg-surface-card p-space-md shadow-sm flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-[20px]">group</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-text-primary font-semibold">24 Students Matched This Week</span>
+<span class="font-body-sm text-[12px] text-text-secondary">Average GPA of applicants: 3.72</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Interactive JavaScript Micro-interactions -->
+<script>
+    // Save Opportunity Bookmark Toggle
+    const bookmarkBtn = document.getElementById('bookmark-btn');
+    const bookmarkIcon = document.getElementById('bookmark-icon');
+    const bookmarkText = document.getElementById('bookmark-text');
+    let isSaved = false;
+
+    bookmarkBtn.addEventListener('click', () => {
+      isSaved = !isSaved;
+      if (isSaved) {
+        bookmarkIcon.textContent = 'bookmark';
+        bookmarkIcon.classList.add('text-primary');
+        bookmarkText.textContent = 'Saved to Vault';
+        bookmarkBtn.classList.add('bg-primary-fixed', 'text-on-primary-fixed');
+      } else {
+        bookmarkIcon.textContent = 'bookmark_border';
+        bookmarkText.textContent = 'Save Opportunity';
+        bookmarkBtn.classList.remove('bg-primary-fixed', 'text-on-primary-fixed');
+      }
+    });
+
+    // Add to Application Tracker Action
+    const trackerBtn = document.getElementById('add-tracker-btn');
+    const trackerIcon = document.getElementById('tracker-icon');
+    const trackerText = document.getElementById('tracker-text');
+    let isInTracker = false;
+
+    trackerBtn.addEventListener('click', () => {
+      isInTracker = !isInTracker;
+      if (isInTracker) {
+        trackerBtn.classList.replace('bg-primary', 'bg-status-eligible');
+        trackerIcon.textContent = 'check_circle';
+        trackerText.textContent = 'Added to Tracker (Planning)';
+      } else {
+        trackerBtn.classList.replace('bg-status-eligible', 'bg-primary');
+        trackerIcon.textContent = 'add_task';
+        trackerText.textContent = '+ Add to Application Tracker';
+      }
+    });
+
+    // Apply Button Demo Alert
+    const applyBtn = document.getElementById('apply-btn');
+    applyBtn.addEventListener('click', () => {
+      alert("DEMO DATA NOTICE: 'Civic Tech Innovation Fellowship 2025' is a demonstration entity in OpportunityKit. No actual external application has been initiated.");
+    });
+  </script>
+</div></main></div></body></html>

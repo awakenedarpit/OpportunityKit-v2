@@ -1,0 +1,2 @@
+import {NextResponse} from 'next/server';
+export async function GET(){return NextResponse.json({ok:true,app:'OpportunityKit',integrations:{supabase:Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL&&process.env.SUPABASE_SERVICE_ROLE_KEY),gemini:Boolean(process.env.GEMINI_API_KEY),firecrawl:Boolean(process.env.FIRECRAWL_API_KEY),telegram:Boolean(process.env.TELEGRAM_BOT_TOKEN&&process.env.TELEGRAM_WEBHOOK_SECRET)}})}
