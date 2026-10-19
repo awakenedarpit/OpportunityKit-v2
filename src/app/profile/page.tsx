@@ -27,7 +27,10 @@ export default function Profile() {
         setName(data?.full_name||user.user_metadata?.full_name||user.user_metadata?.name||'');
         setEducation(data?.education||'');setSkills(data?.skills||'');setInterests(data?.interests||'');
       }catch(error){
-        if(active)setSaveError(error instanceof Error?error.message:'Could not load profile. Run the Supabase migration first.');
+        const message = error && typeof error === 'object' && 'message' in error && typeof error.message === 'string'
+          ? error.message
+          : error instanceof Error ? error.message : 'Unknown error while loading profile.';
+        if(active)setSaveError(`Profile load failed: ${message}`);
       }finally{if(active)setLoading(false);}
     }
     void loadProfile();
@@ -49,7 +52,12 @@ export default function Profile() {
       const {error:authUpdateError}=await supabase.auth.updateUser({data:{full_name:cleanName}});
       if(authUpdateError)throw authUpdateError;
       setSaved(true);
-    }catch(error){setSaveError(error instanceof Error?error.message:'Could not save your profile. Check the Supabase migration and try again.');}
+    }catch(error){
+      const message = error && typeof error === 'object' && 'message' in error && typeof error.message === 'string'
+        ? error.message
+        : error instanceof Error ? error.message : 'Unknown error while saving profile.';
+      setSaveError(`Profile save failed: ${message}`);
+    }
   }
 
   return <>
