@@ -40,10 +40,9 @@ async function safeUrl(raw: string) {
 function meta(html: string, key: string) {
   const escaped = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const patterns = [
-    new RegExp('<meta[^>]+(?:property|name)\\s*=\\s*["\\']' + escaped + '["\\'][^>]+content\\s*=\\s*["\\']([^"\\']+)["\\'][^>]*>', 'i'),
-    new RegExp('<meta[^>]+content\\s*=\\s*["\\']([^"\\']+)["\\'][^>]+(?:property|name)\\s*=\\s*["\\']' + escaped + '["\\'][^>]*>', 'i'),
-  ];
-  for (const pattern of patterns) {
+    new RegExp(`<meta[^>]+(?:property|name)\\s*=\\s*["']${escaped}["'][^>]+content\\s*=\\s*["']([^"']+)["'][^>]*>`, 'i'),
+    new RegExp(`<meta[^>]+content\\s*=\\s*["']([^"']+)["'][^>]+(?:property|name)\\s*=\\s*["']${escaped}["'][^>]*>`, 'i'),
+  ];  for (const pattern of patterns) {
     const match = html.match(pattern);
     if (match?.[1]) return match[1].replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").trim();
   }
