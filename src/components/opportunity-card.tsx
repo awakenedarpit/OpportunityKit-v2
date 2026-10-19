@@ -4,7 +4,6 @@ import { Bookmark, ArrowUpRight, MapPin, CalendarDays, Sparkles } from 'lucide-r
 import { useEffect, useState } from 'react';
 import type { Opportunity } from '@/lib/types';
 import { createClient } from '@/lib/supabase/client';
-import { WebsitePreview } from '@/components/website-preview';
 
 export function OpportunityCard({ opportunity: o, initialSaved = false }: { opportunity: Opportunity; initialSaved?: boolean }) {
   const [saved, setSaved] = useState(initialSaved);
@@ -51,7 +50,7 @@ export function OpportunityCard({ opportunity: o, initialSaved = false }: { oppo
 
   return <article className="opportunity-card">
     <div className="card-topline"><span className={`category-icon category-${o.category.toLowerCase().replace(/[^a-z]/g, '-').slice(0, 12)}`}>{o.category.toLowerCase().includes('hack') ? '⚡' : o.category.toLowerCase().includes('intern') ? '◈' : o.category.toLowerCase().includes('open') ? '⌘' : '✳'}</span><div className="card-heading"><div className="org-name">{o.organization}</div><h3><Link href={`/opportunities/${encodeURIComponent(o.id)}`}>{o.title}</Link></h3></div><button className={`bookmark-button ${saved ? 'bookmarked' : ''}`} aria-label={saved ? 'Remove bookmark' : 'Save opportunity'} aria-pressed={saved} disabled={busy} onClick={() => void toggleSaved()}><Bookmark size={17} fill={saved ? 'currentColor' : 'none'}/></button></div>
-    <WebsitePreview url={o.url} titleFallback={o.title} descriptionFallback={o.description} compact /><p className="card-description">{o.description}</p><div className="tag-row"><span className="soft-tag">{o.category}</span><span className="soft-tag">{o.mode || 'Flexible'}</span>{o.featured && <span className="match-tag"><Sparkles size={12}/> Featured</span>}</div>
+    <p className="card-description">{o.description}</p><div className="tag-row"><span className="soft-tag">{o.category}</span><span className="soft-tag">{o.mode || 'Flexible'}</span>{o.featured && <span className="match-tag"><Sparkles size={12}/> Featured</span>}</div>
     <div className="card-meta"><span><MapPin size={14}/>{o.location || 'Location flexible'}</span><span><CalendarDays size={14}/>{deadline}</span></div>
     {notice && <p className="error-note" role="status">{notice}</p>}
     <div className="card-footer"><span className="source-label">{o.source === 'Demo' ? 'Sample listing' : o.source || 'Verified source'}</span><Link href={`/opportunities/${encodeURIComponent(o.id)}`} className="text-link">View details <ArrowUpRight size={15}/></Link></div>
