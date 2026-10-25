@@ -179,63 +179,41 @@ export async function extractOpportunity(input: { url: string; markdown: string;
     const shouldTryGeminiFallback = primaryModel !== fallbackModel
       && (isTransientGeminiError(primaryError) || isModelUnavailableError(primaryError));
 
+    let geminiError = primaryError;
     if (shouldTryGeminiFallback) {
       try {
         responseText = await generateWithRetry(genAI, fallbackModel, prompt);
       } catch (fallbackError) {
-        // Try independent providers in order after both Gemini models fail.
-        const providerErrors: string[] = [];
-        if (process.env.OPENROUTER_API_KEY) {
-          try {
-            responseText = await generateWithOpenRouter(prompt);
-          } catch (error) {
-            providerErrors.push(`OpenRouter: ${error instanceof Error ? error.message : String(error)}`);
-          }
-        }
-        if (providerErrors.length === 0 && !process.env.OPENROUTER_API_KEY) {
-          providerErrors.push('OpenRouter: OPENROUTER_API_KEY is not configured');
-        }
-        if (!responseText && process.env.GROQ_API_KEY) {
-          try {
-            responseText = await generateWithGroq(prompt);
-          } catch (error) {
-            providerErrors.push(`Groq: ${error instanceof Error ? error.message : String(error)}`);
-          }
-        } else if (!process.env.GROQ_API_KEY) {
-          providerErrors.push('Groq: GROQ_API_KEY is not configured');
-        }
-        if (!responseText) {
-          throw new Error(`Gemini failed on both configured models (${primaryModel}, ${fallbackModel}). ${fallbackError instanceof Error ? fallbackError.message : String(fallbackError)}. ${providerErrors.join('. ')}`);
-        }
+        geminiError = fallbackError;
       }
-    } else if (isTransientGeminiError(primaryError) || isModelUnavailableError(primaryError)) {
-      if (!process.env.OPENROUTER_API_KEY) {
-        throw new Error(`Gemini is unavailable after retries (model: ${primaryModel}) and OpenRouter is not configured. Add OPENROUTER_API_KEY to enable provider fallback. Details: ${primaryError instanceof Error ? primaryError.message : String(primaryError)}`);
-      }
+    }
+
+    if (!responseText) {
+      // User-requested provider order: Gemini first, then Groq, then OpenRouter.
       const providerErrors: string[] = [];
-      if (process.env.OPENROUTER_API_KEY) {
-        try {
-          responseText = await generateWithOpenRouter(prompt);
-        } catch (error) {
-          providerErrors.push(`OpenRouter: ${error instanceof Error ? error.message : String(error)}`);
-        }
-      } else {
-        providerErrors.push('OpenRouter: OPENROUTER_API_KEY is not configured');
-      }
-      if (!responseText && process.env.GROQ_API_KEY) {
+      if (process.env.GROQ_API_KEY) {
         try {
           responseText = await generateWithGroq(prompt);
         } catch (error) {
           providerErrors.push(`Groq: ${error instanceof Error ? error.message : String(error)}`);
         }
-      } else if (!process.env.GROQ_API_KEY) {
+      } else {
         providerErrors.push('Groq: GROQ_API_KEY is not configured');
       }
-      if (!responseText) {
-        throw new Error(`Gemini failed (model: ${primaryModel}) and provider fallbacks failed. Gemini: ${primaryError instanceof Error ? primaryError.message : String(primaryError)}. ${providerErrors.join('. ')}`);
+
+      if (!responseText && process.env.OPENROUTER_API_KEY) {
+        try {
+          responseText = await generateWithOpenRouter(prompt);
+        } catch (error) {
+          providerErrors.push(`OpenRouter: ${error instanceof Error ? error.message : String(error)}`);
+        }
+      } else if (!responseText && !process.env.OPENROUTER_API_KEY) {
+        providerErrors.push('OpenRouter: OPENROUTER_API_KEY is not configured');
       }
-    } else {
-      throw primaryError;
+
+      if (!responseText) {
+        throw new Error(`Gemini failed (model: ${primaryModel}${shouldTryGeminiFallback ? `, fallback: ${fallbackModel}` : ''}). ${geminiError instanceof Error ? geminiError.message : String(geminiError)}. ${providerErrors.join('. ')}`);
+      }
     }
   }
 
