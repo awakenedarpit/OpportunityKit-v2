@@ -28,7 +28,7 @@ async function generateWithOpenRouter(prompt: string): Promise<string> {
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) throw new Error('OPENROUTER_API_KEY is not configured');
 
-  const model = process.env.OPENROUTER_MODEL || 'google/gemini-2.5-flash';
+  const model = process.env.OPENROUTER_MODEL || 'qwen/qwen3.6-flash';
   let lastError: Error | undefined;
   for (let attempt = 0; attempt < 3; attempt += 1) {
     try {
@@ -76,7 +76,7 @@ async function generateWithGroq(prompt: string): Promise<string> {
   const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) throw new Error('GROQ_API_KEY is not configured');
 
-  const model = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+  const model = process.env.GROQ_MODEL || 'openai/gpt-oss-120b';
   let lastError: Error | undefined;
   for (let attempt = 0; attempt < 3; attempt += 1) {
     try {
@@ -182,7 +182,7 @@ export async function extractOpportunity(input: { url: string; markdown: string;
     let geminiError = primaryError;
     if (shouldTryGeminiFallback) {
       try {
-        responseText = await generateWithRetry(genAI, fallbackModel, prompt);
+        responseText = await generateWithRetry(genAI!, fallbackModel, prompt);
       } catch (fallbackError) {
         geminiError = fallbackError;
       }
@@ -212,7 +212,7 @@ export async function extractOpportunity(input: { url: string; markdown: string;
       }
 
       if (!responseText) {
-        throw new Error(`Gemini failed (model: ${primaryModel}${shouldTryGeminiFallback ? `, fallback: ${fallbackModel}` : ''}). ${geminiError instanceof Error ? geminiError.message : String(geminiError)}. ${providerErrors.join('. ')}`);
+        throw new Error(`${genAI ? `Gemini failed (model: ${primaryModel}${shouldTryGeminiFallback ? `, fallback: ${fallbackModel}` : ''})` : 'Gemini skipped (GEMINI_API_KEY is not configured)'}. ${geminiError instanceof Error ? geminiError.message : String(geminiError)}. ${providerErrors.join('. ')}`);
       }
     }
   }
@@ -221,7 +221,7 @@ export async function extractOpportunity(input: { url: string; markdown: string;
   try {
     parsed = JSON.parse(responseText) as Record<string, unknown>;
   } catch {
-    throw new Error('Gemini returned invalid JSON for this opportunity. Please retry the import.');
+    throw new Error('The AI provider returned invalid JSON for this opportunity. Please retry the import.');
   }
   if (!parsed.title || typeof parsed.title !== 'string') {
     throw new Error('AI could not identify an opportunity in this link');
