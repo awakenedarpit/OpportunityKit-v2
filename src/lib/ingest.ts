@@ -63,7 +63,7 @@ async function generateWithOpenRouter(prompt: string): Promise<string> {
       }
     } catch (error) {
       const err = error instanceof Error ? error : new Error(String(error));
-      const retryable = /\b(429|500|502|503|504)\b|fetch failed|ECONNRESET|ETIMEDOUT/i.test(err.message);
+      const retryable = /\\b(429|500|502|503|504)\\b|fetch failed|ECONNRESET|ETIMEDOUT/i.test(err.message);
       if (!retryable || attempt === 2) throw err;
       lastError = err;
     }
