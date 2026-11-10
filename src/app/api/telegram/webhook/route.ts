@@ -34,7 +34,16 @@ async function alreadyProcessed(updateId: number): Promise<boolean> {
 }
 
 /** Telegram puts URLs in text, captions, or hidden text_link entities. */
-function extractMessageUrls(message: Record<string, any>): string[] {
+type TelegramEntity = { type?: string; url?: string };
+type TelegramMessage = {
+  text?: string;
+  caption?: string;
+  entities?: TelegramEntity[];
+  caption_entities?: TelegramEntity[];
+  chat?: { id?: string | number };
+};
+
+function extractMessageUrls(message: TelegramMessage): string[] {
   const text = typeof message.text === 'string'
     ? message.text
     : typeof message.caption === 'string'
@@ -47,8 +56,8 @@ function extractMessageUrls(message: Record<string, any>): string[] {
 
   const visibleUrls = text.match(/https?:\/\/[^\s<>]+/gi) || [];
   const hiddenUrls = entities
-    .filter((entity: any) => entity?.type === 'text_link' && typeof entity.url === 'string')
-    .map((entity: any) => entity.url as string);
+    .filter((entity) => entity.type === 'text_link' && typeof entity.url === 'string')
+    .map((entity) => entity.url as string);
 
   return [...new Set([...visibleUrls, ...hiddenUrls].map((value) => value.replace(/[),.!?]+$/, '')))];
 }
@@ -109,7 +118,7 @@ export async function POST(req: NextRequest) {
 
     if (await alreadyProcessed(updateId)) return NextResponse.json({ ok: true, duplicate: true });
 
-    const msg = update.message;
+    const msg = update.message as TelegramMessage | undefined;
     if (!msg?.chat?.id) return NextResponse.json({ ok: true, ignored: true });
 
     const chatId = msg.chat.id;
