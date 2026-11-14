@@ -59,7 +59,17 @@ function extractMessageUrls(message: TelegramMessage): string[] {
     .filter((entity) => entity.type === 'text_link' && typeof entity.url === 'string')
     .map((entity) => entity.url as string);
 
-  return [...new Set([...visibleUrls, ...hiddenUrls].map((value) => value.replace(/[),.!?]+$/, '')))];
+  const trimTrailingPunctuation = (value: string) => {
+    let end = value.length;
+    while (end > 0) {
+      const ch = value[end - 1];
+      if (ch !== ')' && ch !== ',' && ch !== '.' && ch !== '!' && ch !== '?') break;
+      end -= 1;
+    }
+    return value.slice(0, end);
+  };
+
+  return [...new Set([...visibleUrls, ...hiddenUrls].map(trimTrailingPunctuation))];
 }
 
 async function processMessage(chatId: string | number, url: string) {
@@ -140,6 +150,7 @@ export async function POST(req: NextRequest) {
     }
 
     after(async () => {
+
       try {
         await send(chatId, '🔎 Link received. I am extracting the opportunity details and saving them to OpportunityKit.');
       } catch (error) {
