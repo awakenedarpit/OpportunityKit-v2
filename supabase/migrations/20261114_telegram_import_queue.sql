@@ -19,7 +19,7 @@ alter table public.telegram_import_jobs enable row level security;
 create or replace function public.claim_telegram_import_jobs(p_limit integer default 1)
 returns setof public.telegram_import_jobs
 language sql
-security definer
+security invoker
 set search_path = public
 as $$
   with candidates as (
