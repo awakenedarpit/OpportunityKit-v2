@@ -82,7 +82,8 @@ export async function POST(req: NextRequest) {
     if (await alreadyProcessed(updateId)) return NextResponse.json({ ok: true, duplicate: true });
 
     const msg = update.message; // Ignore edited_message to avoid re-importing edited copies.
-    if (!msg?.chat?.id || !msg?.text) return NextResponse.json({ ok: true, ignored: true });
+    const messageText = typeof msg?.text === 'string' ? msg.text : typeof msg?.caption === 'string' ? msg.caption : '';
+    if (!msg?.chat?.id || !messageText) return NextResponse.json({ ok: true, ignored: true });
 
     const chatId = msg.chat.id;
     if (!isAuthorizedTelegramChat(chatId)) {
@@ -90,7 +91,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true, ignored: true });
     }
 
-    const urls = String(msg.text).match(/https?:\/\/[^\s<>]+/g) || [];
+    const urls = messageText.match(/https?:\/\/[^\s<>]+/g) || [];
     if (!urls.length) {
       after(() => send(chatId, 'Send one public hackathon, internship, scholarship, or opportunity URL. I will extract its key details and add it to OpportunityKit.'));
       return NextResponse.json({ ok: true });
@@ -104,7 +105,12 @@ export async function POST(req: NextRequest) {
 
     // Acknowledge Telegram immediately; continue scraping and AI extraction after the response.
     after(async () => {
-      await send(chatId, '🔎 Link received. I am processing it once; I will send the extracted opportunity details when ready.');
+      // A Telegram acknowledgement failure must not prevent the actual import.
+      try {
+        await send(chatId, '🔎 Link received. I am processing it once; I will send the extracted opportunity details when ready.');
+      } catch (error) {
+        console.error('Telegram processing acknowledgement failed:', error);
+      }
       await processMessage(chatId, url);
     });
 
