@@ -4,6 +4,22 @@ import type { Opportunity } from './types';
 
 const firecrawlBase = (process.env.FIRECRAWL_API_BASE_URL || 'https://api.firecrawl.dev/v2').replace(/\/$/, '');
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+const PROVIDER_TIMEOUT_MS = 25_000;
+const SCRAPE_TIMEOUT_MS = 30_000;
+
+async function withTimeout<T>(promise: Promise<T>, timeoutMs: number, message: string): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    return await Promise.race([
+      promise,
+      new Promise<T>((_, reject) => {
+        timer = setTimeout(() => reject(new Error(message)), timeoutMs);
+      }),
+    ]);
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}
 
 function getGeminiStatus(error: unknown): number | undefined {
   if (!error || typeof error !== 'object') return undefined;
@@ -49,6 +65,7 @@ async function generateWithOpenRouter(prompt: string): Promise<string> {
           response_format: { type: 'json_object' },
           temperature: 0.1,
         }),
+        signal: AbortSignal.timeout(PROVIDER_TIMEOUT_MS),
       });
       const body = await response.json().catch(() => ({}));
       if (!response.ok) {
@@ -63,7 +80,7 @@ async function generateWithOpenRouter(prompt: string): Promise<string> {
       }
     } catch (error) {
       const err = error instanceof Error ? error : new Error(String(error));
-      const retryable = /\\b(429|500|502|503|504)\\b|fetch failed|ECONNRESET|ETIMEDOUT/i.test(err.message);
+      const retryable = /\b(429|500|502|503|504)\b|fetch failed|ECONNRESET|ETIMEDOUT|timed out/i.test(err.message);
       if (!retryable || attempt === 2) throw err;
       lastError = err;
     }
@@ -95,6 +112,7 @@ async function generateWithGroq(prompt: string): Promise<string> {
           response_format: { type: 'json_object' },
           temperature: 0.1,
         }),
+        signal: AbortSignal.timeout(PROVIDER_TIMEOUT_MS),
       });
       const body = await response.json().catch(() => ({}));
       if (!response.ok) {
@@ -109,7 +127,7 @@ async function generateWithGroq(prompt: string): Promise<string> {
       }
     } catch (error) {
       const err = error instanceof Error ? error : new Error(String(error));
-      const retryable = /\\b(429|500|502|503|504)\\b|fetch failed|ECONNRESET|ETIMEDOUT/i.test(err.message);
+      const retryable = /\b(429|500|502|503|504)\b|fetch failed|ECONNRESET|ETIMEDOUT|timed out/i.test(err.message);
       if (!retryable || attempt === 2) throw err;
       lastError = err;
     }
@@ -131,7 +149,7 @@ async function generateWithRetry(
   let lastError: unknown;
   for (let attempt = 0; attempt < 3; attempt += 1) {
     try {
-      const result = await model.generateContent(prompt);
+      const result = await withTimeout(model.generateContent(prompt), PROVIDER_TIMEOUT_MS, 'Gemini request timed out');
       return result.response.text();
     } catch (error) {
       lastError = error;
@@ -152,6 +170,7 @@ export async function scrapeUrl(url: string) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ url, formats: ['markdown', 'links'], onlyMainContent: true }),
+    signal: AbortSignal.timeout(SCRAPE_TIMEOUT_MS),
   });
   const json = await response.json().catch(() => ({}));
   if (!response.ok || !json.success) throw new Error(json.error || `Firecrawl scrape failed (${response.status})`);

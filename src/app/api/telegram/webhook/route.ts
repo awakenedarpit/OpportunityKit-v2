@@ -1,9 +1,6 @@
-import { NextRequest, NextResponse, after } from 'next/server';
-import { ingestLink } from '@/lib/ingest';
+import { NextRequest, NextResponse } from 'next/server';
 import { getAdminSupabase } from '@/lib/supabase';
 import { isAuthorizedTelegramChat, isValidHttpUrl } from '@/lib/security';
-
-export const maxDuration = 60;
 
 const api = (method: string) => `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/${method}`;
 
@@ -27,7 +24,12 @@ type TelegramMessage = {
   caption_entities?: TelegramEntity[];
   chat?: { id?: string | number };
 };
-type QueuedJob = { id: number; chat_id: string; url: string; attempts: number };
+type TelegramUpdate = {
+  update_id?: unknown;
+  message?: TelegramMessage;
+  edited_message?: TelegramMessage;
+  channel_post?: TelegramMessage;
+};
 
 function extractMessageUrls(message: TelegramMessage): string[] {
   const text = typeof message.text === 'string'
@@ -43,69 +45,6 @@ function extractMessageUrls(message: TelegramMessage): string[] {
   return [...new Set([...visible, ...hidden].map(trim))];
 }
 
-/**
- * Run the queued import after the webhook response has been sent.
- * This keeps Telegram's webhook acknowledgement fast without relying on a
- * separate scheduler being enabled in GitHub Actions.
- */
-function scheduleQueueProcessing(db: NonNullable<ReturnType<typeof getAdminSupabase>>) {
-  after(async () => {
-    try {
-      const { data, error } = await db.rpc('claim_telegram_import_jobs', { p_limit: 1 });
-      if (error) throw new Error(`Queue claim failed: ${error.message}`);
-      const job = ((data || []) as QueuedJob[])[0];
-      if (!job) return;
-
-      try {
-        const item = await ingestLink(job.url, job.chat_id);
-        const summary = [
-          '✅ Opportunity saved to OpportunityKit',
-          '',
-          item.title,
-          `Organization: ${item.organization}`,
-          `Type: ${item.type} · ${item.mode}`,
-          `Deadline: ${item.deadline || 'Not specified — check source'}`,
-          `Location: ${item.location}`,
-          `Skills: ${item.skills.slice(0, 6).join(', ') || 'Not specified'}`,
-          '',
-          item.description.slice(0, 450),
-          '',
-          `Source: ${item.url}`,
-          process.env.APP_BASE_URL ? `Dashboard: ${process.env.APP_BASE_URL}/discover` : '',
-        ].filter(Boolean).join('\n');
-        await send(job.chat_id, summary);
-
-        const { error: updateError } = await db.from('telegram_import_jobs')
-          .update({ status: 'completed', last_error: null, locked_at: null, updated_at: new Date().toISOString() })
-          .eq('id', job.id);
-        if (updateError) throw updateError;
-      } catch (jobError) {
-        const message = jobError instanceof Error ? jobError.message : String(jobError);
-        console.error('Telegram queued import failed:', { jobId: job.id, error: message });
-        const terminal = job.attempts >= 3;
-        const { error: updateError } = await db.from('telegram_import_jobs').update({
-          status: terminal ? 'failed' : 'pending',
-          last_error: message.slice(0, 1000),
-          locked_at: null,
-          next_attempt_at: new Date(Date.now() + (terminal ? 0 : 60_000 * job.attempts)).toISOString(),
-          updated_at: new Date().toISOString(),
-        }).eq('id', job.id);
-        if (updateError) console.error('Could not update failed Telegram job:', updateError.message);
-
-        if (terminal) {
-          try {
-            await send(job.chat_id, `❌ I couldn't import this page after 3 attempts. Error: ${message.slice(0, 500)}`);
-          } catch (sendError) {
-            console.error('Telegram failure notification failed:', sendError);
-          }
-        }
-      }
-    } catch (error) {
-      console.error('Telegram background queue processing failed:', error);
-    }
-  });
-}
-
 export async function POST(req: NextRequest) {
   const secret = process.env.TELEGRAM_WEBHOOK_SECRET;
   if (!secret || req.nextUrl.searchParams.get('secret') !== secret) {
@@ -116,8 +55,8 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const update = await req.json();
-    const msg = update.message as TelegramMessage | undefined;
+    const update = await req.json() as TelegramUpdate;
+    const msg = update.message || update.edited_message || update.channel_post;
     if (!msg?.chat?.id) return NextResponse.json({ ok: true, ignored: true });
     const chatId = msg.chat.id;
 
@@ -161,9 +100,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Could not queue this import' }, { status: 503 });
     }
 
-    // Schedule even for duplicate Telegram deliveries: the original webhook
-    // may have queued the row but failed before its background task ran.
-    scheduleQueueProcessing(db);
+    try {
+      await send(chatId, error
+        ? 'This link is already queued. I will send the result when processing completes.'
+        : 'Link received. I will send the extracted opportunity details here when processing completes.');
+    } catch (replyError) {
+      console.error('Telegram queue acknowledgement failed:', replyError instanceof Error ? replyError.message : String(replyError));
+    }
     return NextResponse.json({ ok: true, accepted: true, duplicate: Boolean(error) });
   } catch (error) {
     console.error('Telegram webhook error:', error);
