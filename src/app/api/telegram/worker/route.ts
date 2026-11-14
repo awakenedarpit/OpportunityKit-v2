@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ingestLink } from '@/lib/ingest';
 import { getAdminSupabase } from '@/lib/supabase';
 
-export const maxDuration = 300;
+export const maxDuration = 60;
 
 type Job = { id: number; chat_id: string; url: string; attempts: number };
 const telegramApi = (method: string) => `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/${method}`;
