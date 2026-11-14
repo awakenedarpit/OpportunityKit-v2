@@ -257,13 +257,15 @@ export async function extractOpportunity(input: { url: string; markdown: string;
   };
 
   const db = getAdminSupabase();
-  if (db) {
-    const { error } = await db.from('opportunities').upsert(
-      { ...opp, external_id: input.url, submitted_by: input.submittedBy || null },
-      { onConflict: 'url' },
-    );
-    if (error) throw new Error(`Supabase save failed: ${error.message}`);
+  if (!db) {
+    throw new Error('Supabase is not configured: set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY to save imported opportunities.');
   }
+
+  const { error } = await db.from('opportunities').upsert(
+    { ...opp, external_id: input.url, submitted_by: input.submittedBy || null },
+    { onConflict: 'url' },
+  );
+  if (error) throw new Error(`Supabase save failed: ${error.message}`);
   return opp;
 }
 
