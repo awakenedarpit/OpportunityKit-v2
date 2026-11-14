@@ -153,10 +153,12 @@ export async function scrapeUrl(url: string) {
     },
     body: JSON.stringify({ url, formats: ['markdown', 'links'], onlyMainContent: true }),
   });
-  const json = await response.json();
+  const json = await response.json().catch(() => ({}));
   if (!response.ok || !json.success) throw new Error(json.error || `Firecrawl scrape failed (${response.status})`);
+  const markdown = String(json.data?.markdown || '').trim();
+  if (markdown.length < 40) throw new Error('The page returned too little readable content. It may require login or block automated access.');
   return {
-    markdown: String(json.data?.markdown || ''),
+    markdown,
     title: String(json.data?.metadata?.title || ''),
     description: String(json.data?.metadata?.description || ''),
     url,
@@ -260,7 +262,6 @@ export async function extractOpportunity(input: { url: string; markdown: string;
   if (!db) {
     throw new Error('Supabase is not configured: set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY to save imported opportunities.');
   }
-
   const { error } = await db.from('opportunities').upsert(
     { ...opp, external_id: input.url, submitted_by: input.submittedBy || null },
     { onConflict: 'url' },

@@ -28,18 +28,55 @@ async function alreadyProcessed(updateId: number): Promise<boolean> {
 
   const { error } = await db.from('telegram_processed_updates').insert({ update_id: updateId });
   if (!error) return false;
-  if (error.code === '23505') return true; // Telegram redelivered the same update.
-  // If the migration has not been applied yet, keep the bot usable but log the missing table.
+  if (error.code === '23505') return true;
   console.error('Telegram idempotency storage unavailable:', error.message);
   return false;
 }
 
+/** Telegram puts URLs in text, captions, or hidden text_link entities. */
+type TelegramEntity = { type?: string; url?: string };
+type TelegramMessage = {
+  text?: string;
+  caption?: string;
+  entities?: TelegramEntity[];
+  caption_entities?: TelegramEntity[];
+  chat?: { id?: string | number };
+};
+
+function extractMessageUrls(message: TelegramMessage): string[] {
+  const text = typeof message.text === 'string'
+    ? message.text
+    : typeof message.caption === 'string'
+      ? message.caption
+      : '';
+  const entities = [
+    ...(Array.isArray(message.entities) ? message.entities : []),
+    ...(Array.isArray(message.caption_entities) ? message.caption_entities : []),
+  ];
+
+  const visibleUrls = text.match(/https?:\/\/[^\s<>]+/gi) || [];
+  const hiddenUrls = entities
+    .filter((entity) => entity.type === 'text_link' && typeof entity.url === 'string')
+    .map((entity) => entity.url as string);
+
+  return [...new Set([...visibleUrls, ...hiddenUrls].map((value) => value.replace(/[),.!?]+$/, '')))];
+}
+
 async function processMessage(chatId: string | number, url: string) {
   try {
+    // Do not report success unless the ingestion service can persist the result.
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      throw new Error('Database is not configured. Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in Vercel.');
+    }
+    if (!process.env.FIRECRAWL_API_KEY) {
+      throw new Error('Page extraction is not configured. Set FIRECRAWL_API_KEY in Vercel.');
+    }
+
+    console.info('Telegram import started', { chatId: String(chatId), host: new URL(url).hostname });
     const item = await ingestLink(url, String(chatId));
     const deadline = item.deadline || 'Not specified — check source';
     const summary = [
-      '✅ Opportunity imported to OpportunityKit',
+      '✅ Opportunity saved to OpportunityKit',
       '',
       item.title,
       `Organization: ${item.organization}`,
@@ -54,11 +91,13 @@ async function processMessage(chatId: string | number, url: string) {
       process.env.APP_BASE_URL ? `Dashboard: ${process.env.APP_BASE_URL}/discover` : '',
     ].filter(Boolean).join('\n');
     await send(chatId, summary);
+    console.info('Telegram import saved', { chatId: String(chatId), title: item.title });
   } catch (error) {
-    console.error('Telegram opportunity import failed:', error);
+    const message = error instanceof Error ? error.message : 'Unexpected error';
+    console.error('Telegram opportunity import failed:', message);
     await send(
       chatId,
-      `I couldn't import this page. ${error instanceof Error ? error.message : 'Unexpected error'}\nPlease check the page URL and import service configuration.`,
+      `I couldn't import this page: ${message}\nNo successful import was recorded. Please check the link and integration configuration, then try again.`,
     );
   }
 }
@@ -77,13 +116,10 @@ export async function POST(req: NextRequest) {
     const updateId = Number(update.update_id);
     if (!Number.isSafeInteger(updateId)) return NextResponse.json({ ok: true, ignored: true });
 
-    // Telegram retries webhook updates when the handler takes too long.
-    // Persist update_id before acknowledging so one incoming message is processed once.
     if (await alreadyProcessed(updateId)) return NextResponse.json({ ok: true, duplicate: true });
 
-    const msg = update.message; // Ignore edited_message to avoid re-importing edited copies.
-    const messageText = typeof msg?.text === 'string' ? msg.text : typeof msg?.caption === 'string' ? msg.caption : '';
-    if (!msg?.chat?.id || !messageText) return NextResponse.json({ ok: true, ignored: true });
+    const msg = update.message as TelegramMessage | undefined;
+    if (!msg?.chat?.id) return NextResponse.json({ ok: true, ignored: true });
 
     const chatId = msg.chat.id;
     if (!isAuthorizedTelegramChat(chatId)) {
@@ -91,25 +127,24 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true, ignored: true });
     }
 
-    const urls = messageText.match(/https?:\/\/[^\s<>]+/g) || [];
+    const urls = extractMessageUrls(msg);
     if (!urls.length) {
-      after(() => send(chatId, 'Send one public hackathon, internship, scholarship, or opportunity URL. I will extract its key details and add it to OpportunityKit.'));
-      return NextResponse.json({ ok: true });
+      after(() => send(chatId, 'I received your message, but could not find a link. Send a public opportunity URL in the message text or caption.'));
+      return NextResponse.json({ ok: true, missingUrl: true });
     }
 
-    const url = (urls[0] ?? '').replace(/[),.!?]+$/, '');
+    const url = urls[0];
     if (!isValidHttpUrl(url)) {
       after(() => send(chatId, 'That URL does not look like a valid public web page. Please send an https:// link.'));
-      return NextResponse.json({ ok: true });
+      return NextResponse.json({ ok: true, invalidUrl: true });
     }
 
-    // Acknowledge Telegram immediately; continue scraping and AI extraction after the response.
     after(async () => {
-      // A Telegram acknowledgement failure must not prevent the actual import.
+
       try {
-        await send(chatId, '🔎 Link received. I am processing it once; I will send the extracted opportunity details when ready.');
+        await send(chatId, '🔎 Link received. I am extracting the opportunity details and saving them to OpportunityKit.');
       } catch (error) {
-        console.error('Telegram processing acknowledgement failed:', error);
+        console.error('Telegram acknowledgement failed:', error);
       }
       await processMessage(chatId, url);
     });
