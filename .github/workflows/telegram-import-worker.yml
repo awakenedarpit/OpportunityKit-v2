@@ -22,7 +22,13 @@ jobs:
             echo "Missing OPPORTUNITYKIT_CRON_SECRET repository secret."
             exit 1
           fi
-          curl --fail-with-body --silent --show-error \
+          if ! curl --fail-with-body --silent --show-error \
             --max-time 70 \
             -H "Authorization: Bearer ${CRON_SECRET}" \
-            "https://opportunity-kit-v2.vercel.app/api/telegram/worker"
+            "https://opportunity-kit-v2.vercel.app/api/telegram/worker"; then
+            echo "****** failed, retrying with legacy authorization header format..."
+            curl --fail-with-body --silent --show-error \
+              --max-time 70 \
+              -H "Authorization: ${CRON_SECRET}" \
+              "https://opportunity-kit-v2.vercel.app/api/telegram/worker"
+          fi
