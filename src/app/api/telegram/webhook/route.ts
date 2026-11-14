@@ -37,7 +37,7 @@ function extractMessageUrls(message: TelegramMessage): string[] {
     ...(Array.isArray(message.entities) ? message.entities : []),
     ...(Array.isArray(message.caption_entities) ? message.caption_entities : []),
   ];
-  const visible = text.match(/https?:\\/\\/[^\\s<>]+/gi) || [];
+  const visible = text.match(/https?:\/\/[^\s<>]+/gi) || [];
   const hidden = entities.filter(e => e.type === 'text_link' && typeof e.url === 'string').map(e => e.url as string);
   const trim = (value: string) => value.replace(/[),.!?]+$/, '');
   return [...new Set([...visible, ...hidden].map(trim))];
@@ -72,7 +72,7 @@ function scheduleQueueProcessing(db: NonNullable<ReturnType<typeof getAdminSupab
           '',
           `Source: ${item.url}`,
           process.env.APP_BASE_URL ? `Dashboard: ${process.env.APP_BASE_URL}/discover` : '',
-        ].filter(Boolean).join('\\n');
+        ].filter(Boolean).join('\n');
         await send(job.chat_id, summary);
 
         const { error: updateError } = await db.from('telegram_import_jobs')
