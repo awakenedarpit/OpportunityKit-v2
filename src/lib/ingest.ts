@@ -262,8 +262,10 @@ export async function extractOpportunity(input: { url: string; markdown: string;
   if (!db) {
     throw new Error('Supabase is not configured: set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY to save imported opportunities.');
   }
+  // `url` is already the unique deduplication key in 001_initial_schema.sql.
+  // Do not write `external_id`: that column is not present in the deployed schema.
   const { error } = await db.from('opportunities').upsert(
-    { ...opp, external_id: input.url, submitted_by: input.submittedBy || null },
+    { ...opp, submitted_by: input.submittedBy || null },
     { onConflict: 'url' },
   );
   if (error) throw new Error(`Supabase save failed: ${error.message}`);
