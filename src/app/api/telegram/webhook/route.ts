@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { after } from 'next/server';
-import { ingestLink } from '@/lib/ingest';
 import { getAdminSupabase } from '@/lib/supabase';
 import { isAuthorizedTelegramChat, isValidHttpUrl } from '@/lib/security';
 
-export const maxDuration = 60;
+export const maxDuration = 10;
 
 const api = (method: string) => `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/${method}`;
 
@@ -14,26 +12,11 @@ async function send(chatId: string | number, text: string) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ chat_id: chatId, text, disable_web_page_preview: true }),
-    signal: AbortSignal.timeout(10000),
+    signal: AbortSignal.timeout(8000),
   });
-  if (!response.ok) {
-    const detail = await response.text().catch(() => '');
-    throw new Error(`Telegram sendMessage failed (${response.status}): ${detail.slice(0, 300)}`);
-  }
+  if (!response.ok) throw new Error(`Telegram sendMessage failed (${response.status})`);
 }
 
-async function alreadyProcessed(updateId: number): Promise<boolean> {
-  const db = getAdminSupabase();
-  if (!db) return false;
-
-  const { error } = await db.from('telegram_processed_updates').insert({ update_id: updateId });
-  if (!error) return false;
-  if (error.code === '23505') return true;
-  console.error('Telegram idempotency storage unavailable:', error.message);
-  return false;
-}
-
-/** Telegram puts URLs in text, captions, or hidden text_link entities. */
 type TelegramEntity = { type?: string; url?: string };
 type TelegramMessage = {
   text?: string;
@@ -46,70 +29,15 @@ type TelegramMessage = {
 function extractMessageUrls(message: TelegramMessage): string[] {
   const text = typeof message.text === 'string'
     ? message.text
-    : typeof message.caption === 'string'
-      ? message.caption
-      : '';
+    : typeof message.caption === 'string' ? message.caption : '';
   const entities = [
     ...(Array.isArray(message.entities) ? message.entities : []),
     ...(Array.isArray(message.caption_entities) ? message.caption_entities : []),
   ];
-
-  const visibleUrls = text.match(/https?:\/\/[^\s<>]+/gi) || [];
-  const hiddenUrls = entities
-    .filter((entity) => entity.type === 'text_link' && typeof entity.url === 'string')
-    .map((entity) => entity.url as string);
-
-  const trimTrailingPunctuation = (value: string) => {
-    let end = value.length;
-    while (end > 0) {
-      const ch = value[end - 1];
-      if (ch !== ')' && ch !== ',' && ch !== '.' && ch !== '!' && ch !== '?') break;
-      end -= 1;
-    }
-    return value.slice(0, end);
-  };
-
-  return [...new Set([...visibleUrls, ...hiddenUrls].map(trimTrailingPunctuation))];
-}
-
-async function processMessage(chatId: string | number, url: string) {
-  try {
-    // Do not report success unless the ingestion service can persist the result.
-    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-      throw new Error('Database is not configured. Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in Vercel.');
-    }
-    if (!process.env.FIRECRAWL_API_KEY) {
-      throw new Error('Page extraction is not configured. Set FIRECRAWL_API_KEY in Vercel.');
-    }
-
-    console.info('Telegram import started', { chatId: String(chatId), host: new URL(url).hostname });
-    const item = await ingestLink(url, String(chatId));
-    const deadline = item.deadline || 'Not specified — check source';
-    const summary = [
-      '✅ Opportunity saved to OpportunityKit',
-      '',
-      item.title,
-      `Organization: ${item.organization}`,
-      `Type: ${item.type} · ${item.mode}`,
-      `Deadline: ${deadline}`,
-      `Location: ${item.location}`,
-      `Skills: ${item.skills.slice(0, 6).join(', ') || 'Not specified'}`,
-      '',
-      item.description.slice(0, 450),
-      '',
-      `Source: ${item.url}`,
-      process.env.APP_BASE_URL ? `Dashboard: ${process.env.APP_BASE_URL}/discover` : '',
-    ].filter(Boolean).join('\n');
-    await send(chatId, summary);
-    console.info('Telegram import saved', { chatId: String(chatId), title: item.title });
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unexpected error';
-    console.error('Telegram opportunity import failed:', message);
-    await send(
-      chatId,
-      `I couldn't import this page: ${message}\nNo successful import was recorded. Please check the link and integration configuration, then try again.`,
-    );
-  }
+  const visible = text.match(/https?:\/\/[^\s<>]+/gi) || [];
+  const hidden = entities.filter(e => e.type === 'text_link' && typeof e.url === 'string').map(e => e.url as string);
+  const trim = (value: string) => value.replace(/[),.!?]+$/, '');
+  return [...new Set([...visible, ...hidden].map(trim))];
 }
 
 export async function POST(req: NextRequest) {
@@ -123,43 +51,51 @@ export async function POST(req: NextRequest) {
 
   try {
     const update = await req.json();
-    const updateId = Number(update.update_id);
-    if (!Number.isSafeInteger(updateId)) return NextResponse.json({ ok: true, ignored: true });
-
-    if (await alreadyProcessed(updateId)) return NextResponse.json({ ok: true, duplicate: true });
-
     const msg = update.message as TelegramMessage | undefined;
     if (!msg?.chat?.id) return NextResponse.json({ ok: true, ignored: true });
-
     const chatId = msg.chat.id;
+
     if (!isAuthorizedTelegramChat(chatId)) {
-      after(() => send(chatId, 'This chat is not authorized to import opportunities. Ask the administrator to add your numeric Telegram chat ID to TELEGRAM_ALLOWED_CHAT_IDS.'));
+      try { await send(chatId, 'This chat is not authorized to import opportunities.'); } catch (e) { console.error('Telegram reply failed', e); }
       return NextResponse.json({ ok: true, ignored: true });
     }
 
     const urls = extractMessageUrls(msg);
     if (!urls.length) {
-      after(() => send(chatId, 'I received your message, but could not find a link. Send a public opportunity URL in the message text or caption.'));
+      try { await send(chatId, 'I could not find a link. Send a public opportunity URL in the message text or caption.'); } catch (e) { console.error('Telegram reply failed', e); }
       return NextResponse.json({ ok: true, missingUrl: true });
     }
-
     const url = urls[0];
     if (!isValidHttpUrl(url)) {
-      after(() => send(chatId, 'That URL does not look like a valid public web page. Please send an https:// link.'));
+      try { await send(chatId, 'That URL is not a valid public HTTP(S) page.'); } catch (e) { console.error('Telegram reply failed', e); }
       return NextResponse.json({ ok: true, invalidUrl: true });
     }
 
-    after(async () => {
+    const db = getAdminSupabase();
+    if (!db) {
+      console.error('Telegram queue unavailable: Supabase admin credentials are missing');
+      return NextResponse.json({ error: 'Import queue is unavailable' }, { status: 503 });
+    }
 
-      try {
-        await send(chatId, '🔎 Link received. I am extracting the opportunity details and saving them to OpportunityKit.');
-      } catch (error) {
-        console.error('Telegram acknowledgement failed:', error);
-      }
-      await processMessage(chatId, url);
+    const updateId = Number(update.update_id);
+    if (!Number.isSafeInteger(updateId)) return NextResponse.json({ ok: true, ignored: true });
+
+    const { error } = await db.from('telegram_import_jobs').insert({
+      update_id: updateId,
+      chat_id: String(chatId),
+      url,
+      status: 'pending',
     });
+    if (error && error.code !== '23505') {
+      console.error('Telegram queue insert failed:', error.message);
+      return NextResponse.json({ error: 'Could not queue this import' }, { status: 503 });
+    }
 
-    return NextResponse.json({ ok: true, accepted: true });
+    if (!error) {
+      try { await send(chatId, '📥 Link received and queued. I will send the extracted details here when the import is complete.'); }
+      catch (e) { console.error('Telegram queue acknowledgement failed:', e); }
+    }
+    return NextResponse.json({ ok: true, accepted: true, duplicate: Boolean(error) });
   } catch (error) {
     console.error('Telegram webhook error:', error);
     return NextResponse.json({ error: 'Invalid webhook payload' }, { status: 400 });
