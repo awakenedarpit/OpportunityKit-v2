@@ -29,20 +29,24 @@ type TelegramUpdate = {
   message?: TelegramMessage;
   edited_message?: TelegramMessage;
   channel_post?: TelegramMessage;
+  edited_channel_post?: TelegramMessage;
 };
 
 function extractMessageUrls(message: TelegramMessage): string[] {
-  const text = typeof message.text === 'string'
-    ? message.text
-    : typeof message.caption === 'string' ? message.caption : '';
+  const texts = [
+    typeof message.text === 'string' ? message.text : '',
+    typeof message.caption === 'string' ? message.caption : '',
+  ];
   const entities = [
     ...(Array.isArray(message.entities) ? message.entities : []),
     ...(Array.isArray(message.caption_entities) ? message.caption_entities : []),
   ];
-  const visible = text.match(/https?:\/\/[^\s<>]+/gi) || [];
-  const hidden = entities.filter(e => e.type === 'text_link' && typeof e.url === 'string').map(e => e.url as string);
-  const trim = (value: string) => value.replace(/[),.!?]+$/, '');
-  return [...new Set([...visible, ...hidden].map(trim))];
+  const visible = texts.flatMap(text => text.match(/https?:\/\/[^\s<>]+/gi) || []);
+  const hidden = entities
+    .filter(entity => entity.type === 'text_link' && typeof entity.url === 'string')
+    .map(entity => entity.url as string);
+  const trim = (value: string) => value.trim().replace(/[),.!?;:]+$/, '');
+  return [...new Set([...visible, ...hidden].map(trim).filter(Boolean))];
 }
 
 export async function POST(req: NextRequest) {
@@ -56,8 +60,10 @@ export async function POST(req: NextRequest) {
 
   try {
     const update = await req.json() as TelegramUpdate;
-    const msg = update.message || update.edited_message || update.channel_post;
-    if (!msg?.chat?.id) return NextResponse.json({ ok: true, ignored: true });
+    const msg = update.message || update.edited_message || update.channel_post || update.edited_channel_post;
+    if (msg?.chat?.id === undefined || msg.chat.id === null) {
+      return NextResponse.json({ ok: true, ignored: true });
+    }
     const chatId = msg.chat.id;
 
     if (!isAuthorizedTelegramChat(chatId)) {
@@ -73,8 +79,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true, missingUrl: true });
     }
 
-    const url = urls[0];
-    if (!isValidHttpUrl(url)) {
+    const validUrls = urls.filter(isValidHttpUrl);
+    if (!validUrls.length) {
       try { await send(chatId, 'That URL is not a valid public HTTP(S) page.'); }
       catch (error) { console.error('Telegram reply failed:', error); }
       return NextResponse.json({ ok: true, invalidUrl: true });
@@ -89,25 +95,31 @@ export async function POST(req: NextRequest) {
     const updateId = Number(update.update_id);
     if (!Number.isSafeInteger(updateId)) return NextResponse.json({ ok: true, ignored: true });
 
-    const { error } = await db.from('telegram_import_jobs').insert({
+    // Insert each URL independently so a duplicate URL does not roll back other links
+    // from the same Telegram update. The unique (update_id, url) constraint makes
+    // Telegram retries idempotent while still allowing multiple links per message.
+    const results = await Promise.all(validUrls.map(url => db.from('telegram_import_jobs').insert({
       update_id: updateId,
       chat_id: String(chatId),
       url,
       status: 'pending',
-    });
-    if (error && error.code !== '23505') {
-      console.error('Telegram queue insert failed:', error.message);
+    })));
+    const unexpected = results.find(result => result.error && result.error.code !== '23505');
+    if (unexpected?.error) {
+      console.error('Telegram queue insert failed:', { updateId, chatId: String(chatId), error: unexpected.error.message });
       return NextResponse.json({ error: 'Could not queue this import' }, { status: 503 });
     }
 
+    const queued = results.filter(result => !result.error).length;
+    const duplicates = results.length - queued;
     try {
-      await send(chatId, error
-        ? 'This link is already queued. I will send the result when processing completes.'
-        : 'Link received. I will send the extracted opportunity details here when processing completes.');
+      await send(chatId, queued
+        ? `${queued} opportunity link${queued === 1 ? '' : 's'} queued. I will send the result when processing completes${duplicates ? ` (${duplicates} duplicate${duplicates === 1 ? '' : 's'} skipped)` : ''}.`
+        : 'Those links are already queued. I will send the result when processing completes.');
     } catch (replyError) {
       console.error('Telegram queue acknowledgement failed:', replyError instanceof Error ? replyError.message : String(replyError));
     }
-    return NextResponse.json({ ok: true, accepted: true, duplicate: Boolean(error) });
+    return NextResponse.json({ ok: true, accepted: queued > 0, queued, duplicates });
   } catch (error) {
     console.error('Telegram webhook error:', error);
     return NextResponse.json({ error: 'Invalid webhook payload' }, { status: 400 });

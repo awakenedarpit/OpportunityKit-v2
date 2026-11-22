@@ -19,6 +19,15 @@ async function send(chatId: string, text: string) {
   if (!response.ok) throw new Error(`Telegram sendMessage failed (${response.status})`);
 }
 
+function userFacingFailure(message: string) {
+  const safe = message
+    .replace(/https?:\/\/\S+/gi, '[source page]')
+    .replace(/(api[_-]?key|authorization|bearer|token|secret)\s*[:=]\s*\S+/gi, '$1: [redacted]')
+    .replace(/\s+/g, ' ')
+    .trim();
+  return safe.slice(0, 350) || 'The source page could not be imported.';
+}
+
 async function runWorker(req: NextRequest) {
   const secret = process.env.CRON_SECRET;
   if (!secret || req.headers.get('authorization') !== `Bearer ${secret}`) {
@@ -76,7 +85,7 @@ async function runWorker(req: NextRequest) {
         updated_at: new Date().toISOString(),
       }).eq('id', job.id);
       if (terminal) {
-        try { await send(job.chat_id, `❌ I couldn't import this page after 3 attempts. Error: ${message.slice(0, 500)}`); }
+        try { await send(job.chat_id, `❌ I couldn't import this page after 3 attempts. ${userFacingFailure(message)}`); }
         catch (sendError) { console.error('Telegram failure notification failed:', sendError); }
       }
     }

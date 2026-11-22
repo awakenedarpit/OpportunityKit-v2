@@ -1,4 +1,5 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { z } from 'zod';
 import { getAdminSupabase } from './supabase';
 import type { Opportunity } from './types';
 
@@ -6,6 +7,37 @@ const firecrawlBase = (process.env.FIRECRAWL_API_BASE_URL || 'https://api.firecr
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 const PROVIDER_TIMEOUT_MS = 25_000;
 const SCRAPE_TIMEOUT_MS = 30_000;
+
+const providerPayloadSchema = z.object({
+  title: z.string().trim().min(1),
+}).passthrough();
+
+function parseProviderJson(text: string): Record<string, unknown> {
+  const cleaned = text.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
+  const start = cleaned.indexOf('{');
+  const end = cleaned.lastIndexOf('}');
+  if (start < 0 || end <= start) throw new Error('The AI provider returned invalid JSON for this opportunity. Please retry the import.');
+  let value: unknown;
+  try {
+    value = JSON.parse(cleaned.slice(start, end + 1));
+  } catch {
+    throw new Error('The AI provider returned invalid JSON for this opportunity. Please retry the import.');
+  }
+  const parsed = providerPayloadSchema.safeParse(value);
+  if (!parsed.success) throw new Error('AI could not identify an opportunity in this link');
+  return parsed.data;
+}
+
+function normalizedDate(value: unknown): string | null {
+  if (typeof value !== 'string') return null;
+  const input = value.trim();
+  if (!input) return null;
+  const iso = input.match(/^(\d{4}-\d{2}-\d{2})/);
+  if (iso) return iso[1];
+  const parsed = new Date(input);
+  if (Number.isNaN(parsed.getTime())) return null;
+  return parsed.toISOString().slice(0, 10);
+}
 
 async function withTimeout<T>(promise: Promise<T>, timeoutMs: number, message: string): Promise<T> {
   let timer: ReturnType<typeof setTimeout> | undefined;
@@ -76,6 +108,7 @@ async function generateWithOpenRouter(prompt: string): Promise<string> {
       } else {
         const result = body?.choices?.[0]?.message?.content;
         if (typeof result !== 'string' || !result.trim()) throw new Error('OpenRouter returned an empty response');
+        parseProviderJson(result);
         return result;
       }
     } catch (error) {
@@ -123,6 +156,7 @@ async function generateWithGroq(prompt: string): Promise<string> {
       } else {
         const result = body?.choices?.[0]?.message?.content;
         if (typeof result !== 'string' || !result.trim()) throw new Error('Groq returned an empty response');
+        parseProviderJson(result);
         return result;
       }
     } catch (error) {
@@ -150,7 +184,9 @@ async function generateWithRetry(
   for (let attempt = 0; attempt < 3; attempt += 1) {
     try {
       const result = await withTimeout(model.generateContent(prompt), PROVIDER_TIMEOUT_MS, 'Gemini request timed out');
-      return result.response.text();
+      const text = result.response.text();
+      parseProviderJson(text);
+      return text;
     } catch (error) {
       lastError = error;
       if (!isTransientGeminiError(error) || attempt === 2) break;
@@ -249,15 +285,7 @@ export async function extractOpportunity(input: { url: string; markdown: string;
     }
   }
 
-  let parsed: Record<string, unknown>;
-  try {
-    parsed = JSON.parse(responseText) as Record<string, unknown>;
-  } catch {
-    throw new Error('The AI provider returned invalid JSON for this opportunity. Please retry the import.');
-  }
-  if (!parsed.title || typeof parsed.title !== 'string') {
-    throw new Error('AI could not identify an opportunity in this link');
-  }
+  const parsed = parseProviderJson(responseText);
 
   const opp: Opportunity = {
     id: crypto.randomUUID(),
@@ -267,7 +295,7 @@ export async function extractOpportunity(input: { url: string; markdown: string;
     type: String(parsed.type || 'Opportunity'),
     location: String(parsed.location || 'Not specified'),
     mode: String(parsed.mode || 'Not specified'),
-    deadline: typeof parsed.deadline === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(parsed.deadline) ? parsed.deadline : null,
+    deadline: normalizedDate(parsed.deadline),
     url: input.url,
     description: String(parsed.description || 'Details were extracted from the source page. Verify on the official website.'),
     eligibility: Array.isArray(parsed.eligibility) ? parsed.eligibility.map(String).slice(0, 12) : [],

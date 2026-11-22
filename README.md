@@ -43,7 +43,7 @@ The app is built with Next.js and Supabase. Its optional ingestion pipeline uses
 
 ### Telegram link importer
 - Send a public opportunity URL to the configured Telegram bot.
-- The webhook validates the chat against an allowlist and places the URL in a Supabase queue.
+- The webhook validates the chat against an allowlist and places each valid URL in a Supabase queue. It accepts normal messages, captions, hidden `text_link` entities, and channel posts.
 - A scheduled GitHub Actions workflow calls the protected worker endpoint.
 - The worker processes queued imports, saves successful results, and replies in Telegram with the extracted details.
 - Failed jobs can be retried; jobs that exhaust their attempts are marked failed.
@@ -136,7 +136,7 @@ Add the credentials for the services you intend to use. Never commit `.env.local
 
 ### 3. Set up Supabase
 
-Create a Supabase project, configure its URL and keys, and run the SQL migrations in `supabase/migrations/` in filename order using the Supabase SQL Editor. This includes the initial schema, user workspace tables, and Telegram import queue/function migration.
+Create a Supabase project, configure its URL and keys, and run the SQL migrations in `supabase/migrations/` in filename order using the Supabase SQL Editor. This includes the initial schema, user workspace tables, Telegram import queue/function migration, and the multi-link Telegram update constraint migration.
 
 In Supabase Authentication settings, configure the Site URL and allowed redirect URLs for both local development and your deployed domain. Keep RLS enabled on user-owned tables and verify policies with separate test accounts.
 
@@ -212,7 +212,7 @@ curl -X POST "$APP_BASE_URL/api/telegram/setup" \
   -H "Authorization: Bearer $CRON_SECRET"
 ```
 
-9. Ensure the GitHub Actions workflow `.github/workflows/telegram-import-worker.yml` is enabled. It runs on a five-minute schedule and can also be started manually from the Actions tab.
+9. Ensure the GitHub Actions workflow `.github/workflows/telegram-import-worker.yml` is enabled. It runs on a five-minute schedule and can also be started manually from the Actions tab. The workflow must call the same deployed `APP_BASE_URL` configured in Vercel.
 10. Send a public opportunity URL to the bot. The bot should acknowledge that the link was queued, then send a result after the worker processes it.
 
 **Important:** The GitHub secret `OPPORTUNITYKIT_CRON_SECRET` must exactly match the Vercel environment variable `CRON_SECRET`. If they differ, the scheduled worker receives an unauthorized response. The worker also requires Supabase service-role access, Firecrawl, and Telegram configuration in the deployed app.
