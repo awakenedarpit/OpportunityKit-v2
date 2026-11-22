@@ -1,11 +1,11 @@
-# OpportunityKit v2
+# OpportunityKit
 
 <p align="center">
-  <strong>Discover opportunities. Organize applications. Keep your next step in reach.</strong>
+  <strong>Discover opportunities. Organize applications. Accelerate your growth.</strong>
 </p>
 
 <p align="center">
-  A student-focused opportunity discovery and application workspace built with Next.js, Supabase, Gemini, Firecrawl, and Telegram.
+  An AI-assisted opportunity discovery and application workspace for students.
 </p>
 
 <p align="center">
@@ -16,179 +16,133 @@
 
 ---
 
-## Table of contents
-
-- [Overview](#overview)
-- [Features](#features)
-- [How it works](#how-it-works)
-- [Technology stack](#technology-stack)
-- [Project structure](#project-structure)
-- [Getting started](#getting-started)
-- [Environment variables](#environment-variables)
-- [Supabase setup](#supabase-setup)
-- [Opportunity ingestion and Telegram bot](#opportunity-ingestion-and-telegram-bot)
-- [API reference](#api-reference)
-- [Run locally](#run-locally)
-- [Deploy to Vercel](#deploy-to-vercel)
-- [Security and privacy](#security-and-privacy)
-- [Known limitations](#known-limitations)
-- [Contributing](#contributing)
-- [License](#license)
-
 ## Overview
 
-**OpportunityKit** is a web application intended to help students discover opportunities and manage the work that follows. Instead of keeping opportunities in scattered bookmarks and tracking application stages separately, users can discover listings, save relevant items, maintain an application tracker, and manage a profile from one workspace.
+OpportunityKit helps students discover opportunities and manage the steps that follow. It brings opportunity listings, saved items, personal application tracking, and profile information into one workspace—so students can spend less time searching across scattered sources and more time preparing strong applications.
 
-The project combines a Next.js interface with Supabase authentication and persistence. Optional ingestion integrations use Firecrawl to retrieve public webpage content, Google Gemini to turn that content into structured opportunity information, and Telegram to submit opportunity links to the application.
+The app is built with Next.js and Supabase. Its optional ingestion pipeline uses Firecrawl to retrieve public webpage content and AI providers to extract structured opportunity details. A Telegram bot accepts links, queues imports, and sends the extracted result back after processing.
 
-The interface follows the OpportunityKit Stitch-inspired visual direction: midnight navy, electric blue, and violet accents.
-
-> **Project status:** This repository is an actively developed project, not a claim of a fully audited production service. Authentication, profile editing, saved opportunities, and application tracking have been implemented. External integrations require your own credentials and setup. Review the known limitations below before relying on the application for important deadlines.
+> **Project status:** OpportunityKit is actively developed. External integrations require credentials and correct deployment configuration. AI-extracted information can be incomplete or inaccurate; always verify deadlines, eligibility, and application instructions on the original source.
 
 ## Features
 
-### Account and profile
+### Discover and organize
+- Browse, search, filter, and sort opportunity listings.
+- View opportunity details such as organization, type, location, work mode, deadline, eligibility, skills, and source link when available.
+- Save opportunities to a personal saved list.
+- Track applications through Saved, Applied, Assessment, Interview, Offer, Rejected, and Withdrawn statuses.
+- Add notes and review application progress.
+- Maintain a profile with education, skills, and interests.
 
-- Email/password sign-up and sign-in through Supabase Auth.
-- Authentication callback handling for confirmation and recovery flows.
-- Protected application pages and session refresh middleware.
-- Sign-out from the application shell.
-- Profile editing for name, education, skills, and interests, stored against the signed-in user's profile.
+### AI-assisted opportunity ingestion
+- Submit a public opportunity URL for processing.
+- Firecrawl retrieves readable page content.
+- AI providers extract structured fields such as title, organization, deadline, eligibility, skills, stipend, and description.
+- Imported opportunities are saved to Supabase, with the source URL used for deduplication.
+- Provider fallback support helps ingestion continue when a configured AI provider is unavailable.
 
-Supabase email confirmation and redirect URLs must be configured for the domain you use.
+### Telegram link importer
+- Send a public opportunity URL to the configured Telegram bot.
+- The webhook validates the chat against an allowlist and places the URL in a Supabase queue.
+- A scheduled GitHub Actions workflow calls the protected worker endpoint.
+- The worker processes queued imports, saves successful results, and replies in Telegram with the extracted details.
+- Failed jobs can be retried; jobs that exhaust their attempts are marked failed.
 
-### Discover opportunities
-
-- Browse opportunity listings in a searchable discovery interface.
-- Filter and sort listings using the available opportunity metadata.
-- Open a detail page with information such as organization, opportunity type, location or work mode, deadline, eligibility, skills, and source URL when provided.
-- Starter and curated data can be used to explore the interface. Treat unverified or sample listings as examples, not confirmed openings.
-
-### Saved opportunities
-
-- Save an opportunity from a listing card.
-- View saved opportunities on the Saved page.
-- Remove an item from the saved list.
-- Store saved records per authenticated user in Supabase.
-
-### Application tracker
-
-- Add opportunities to a personal application tracker.
-- Track statuses such as **Saved**, **Applied**, **Assessment**, **Interview**, **Offer**, **Rejected**, and **Withdrawn**.
-- Record notes and application/deadline details where available.
-- Update a status or remove a tracker entry.
-- View a summary of tracked applications.
-
-### Opportunity ingestion
-
-- Submit a public opportunity URL for ingestion.
-- Use Firecrawl to retrieve page content and Gemini to extract structured fields.
-- Persist ingested listings in Supabase when the required server-side configuration is present.
-- Search for opportunities through the discovery API and process a bounded set of results.
-- Import a URL through the Telegram bot webhook.
-
-AI-generated fields may be incomplete or incorrect. Always open the original source to verify the deadline, eligibility, stipend, and application requirements.
-
-### Health and integration visibility
-
-- A health endpoint reports whether key integration settings are configured.
-- API routes validate request data and protect administrative ingestion actions with a shared secret where configured.
+### Account and data
+- Supabase email/password authentication.
+- Protected workspace pages and authentication callback handling.
+- User-owned profiles, saved opportunities, and application records protected with Row Level Security (RLS).
 
 ## How it works
 
-1. **Discover:** Browse listings and open the original opportunity source for full details.
-2. **Save:** Bookmark opportunities you want to revisit.
-3. **Track:** Add an opportunity to your tracker and update its application status or notes.
-4. **Personalize:** Maintain your profile details for your own workspace.
-5. **Ingest (optional):** Send a public URL through the API or Telegram. Firecrawl retrieves page content, Gemini extracts structured fields, and the server can store the result in Supabase.
-
-The ingestion integrations are optional for local UI development, but the corresponding environment variables are required to use them.
+1. **Discover:** Browse opportunities and open the original source for full details.
+2. **Save:** Bookmark listings worth revisiting.
+3. **Track:** Add opportunities to your tracker and update application status or notes.
+4. **Import:** Submit a public URL through the app's ingestion API or Telegram bot.
+5. **Extract:** Firecrawl retrieves page content; the configured AI provider chain returns structured data.
+6. **Review:** Check the saved listing and verify important information against the official source.
 
 ## Technology stack
 
-| Technology | Role |
+| Technology | Purpose |
 | --- | --- |
-| [Next.js](https://nextjs.org/) 15 | App Router, pages, route handlers, and server-side application logic |
-| [React](https://react.dev/) 19 | Interactive UI components |
-| [TypeScript](https://www.typescriptlang.org/) | Application types |
-| [Supabase](https://supabase.com/) | Authentication, PostgreSQL database, and Row Level Security |
-| [Google Gemini](https://ai.google.dev/) | Structured extraction from opportunity page content |
-| [Firecrawl](https://www.firecrawl.dev/) | Public-page scraping and web search for ingestion |
-| [Telegram Bot API](https://core.telegram.org/bots/api) | Link submission through a Telegram bot |
-| [Lucide](https://lucide.dev/) | Interface icons |
-| [Vercel](https://vercel.com/) | Recommended hosting platform for the Next.js application |
+| Next.js 15 | App Router, pages, route handlers, server-side logic |
+| React 19 | Interactive user interface |
+| TypeScript | Application types |
+| Supabase | Authentication, PostgreSQL database, and Row Level Security |
+| Google Gemini | Primary and secondary AI extraction models |
+| Groq / OpenRouter | Optional cross-provider AI fallbacks |
+| Firecrawl | Public webpage scraping |
+| Telegram Bot API | Opportunity link submission and result notifications |
+| GitHub Actions | Scheduled Telegram import queue worker |
+| Vercel | Recommended hosting for the Next.js application |
+| Lucide | Interface icons |
 
 ## Project structure
 
-The main folders and files are organized approximately as follows:
-
 ```text
 .
-├── public/
-│   └── design-reference/       # Original Stitch design references
+├── .github/workflows/
+│   └── telegram-import-worker.yml  # Scheduled Telegram queue processor
+├── public/                         # Static assets and design references
 ├── src/
 │   ├── app/
-│   │   ├── api/                # Health, ingestion, discovery, and Telegram routes
-│   │   ├── auth/callback/      # Supabase auth callback
-│   │   ├── login/              # Sign-in page
-│   │   ├── signup/             # Registration page
-│   │   ├── saved/              # Saved opportunities
-│   │   ├── tracker/            # Application tracker
-│   │   └── profile/            # Profile editing
-│   ├── components/             # Shared UI and workspace components
+│   │   ├── api/                    # Health, discovery, ingestion, Telegram routes
+│   │   ├── auth/callback/           # Supabase auth callback
+│   │   ├── login/                   # Sign-in
+│   │   ├── signup/                  # Registration
+│   │   ├── discover/                # Opportunity discovery
+│   │   ├── saved/                   # Saved opportunities
+│   │   ├── tracker/                 # Application tracker
+│   │   └── profile/                 # Profile editing
+│   ├── components/                 # Shared UI components
 │   └── lib/
-│       ├── supabase/            # Browser and server Supabase clients
-│       ├── demo-data.ts         # Starter opportunity data
-│       ├── ingest.ts            # Ingestion and extraction pipeline
-│       └── security.ts          # Request and Telegram access checks
-├── supabase/
-│   └── migrations/              # SQL schema migrations
-├── middleware.ts                # Session refresh and page access redirects
-├── .env.example                 # Environment variable template
+│       ├── supabase/                # Supabase clients
+│       ├── ingest.ts                # Scraping and AI extraction pipeline
+│       └── security.ts              # URL and access validation
+├── supabase/migrations/             # Database schema migrations
+├── middleware.ts                   # Session refresh and access redirects
+├── .env.example                    # Environment variable template
 └── package.json
 ```
 
-This is a guide to the key areas; exact filenames may evolve as the project develops.
+This is a high-level map; individual files may change as development continues.
 
 ## Getting started
 
 ### Prerequisites
 
-Install the following:
+- Node.js 20.9 or newer
+- npm and Git
+- A Supabase project
+- Optional API credentials for Firecrawl and AI providers
+- Optional Telegram bot token
 
-- **Node.js 20.9 or newer**
-- **npm**
-- A Git client
-- A Supabase project for authentication and persistent user data
-- Optional: Gemini and Firecrawl API keys for ingestion
-- Optional: a Telegram bot token for link submission
-
-### 1. Clone the repository
+### 1. Clone and install
 
 ```bash
 git clone https://github.com/awakenedarpit/OpportunityKit-v2.git
 cd OpportunityKit-v2
-```
-
-### 2. Install dependencies
-
-```bash
 npm install
 ```
 
-### 3. Create your local environment file
+### 2. Configure environment variables
 
 ```bash
 cp .env.example .env.local
 ```
 
-Open `.env.local` in your editor and add the credentials you need. Never commit this file or share secret values in screenshots, issues, or chat.
+Add the credentials for the services you intend to use. Never commit `.env.local` or paste secret values into issues, screenshots, or public messages.
 
-### 4. Configure Supabase
+### 3. Set up Supabase
 
-Follow the [Supabase setup](#supabase-setup) section before testing sign-in or persistent workspace features.
+Create a Supabase project, configure its URL and keys, and run the SQL migrations in `supabase/migrations/` in filename order using the Supabase SQL Editor. This includes the initial schema, user workspace tables, and Telegram import queue/function migration.
 
-### 5. Start the development server
+In Supabase Authentication settings, configure the Site URL and allowed redirect URLs for both local development and your deployed domain. Keep RLS enabled on user-owned tables and verify policies with separate test accounts.
+
+If your project already has manually modified tables, compare the live schema with the migration files before applying changes. Back up important data first.
+
+### 4. Run the app
 
 ```bash
 npm run dev
@@ -196,217 +150,149 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-Stop the server with `Ctrl+C`. If Next.js reports stale or missing files under `.next`, stop the server, remove the generated build cache with `rm -rf .next`, and run `npm run dev` again.
-
-### Available npm scripts
+### Available scripts
 
 | Command | Purpose |
 | --- | --- |
-| `npm run dev` | Start the local development server |
-| `npm run build` | Create a production build |
-| `npm run start` | Start the production server after building |
-| `npm run lint` | Run the configured lint script; check compatibility with the installed Next.js version if it fails |
+| `npm run dev` | Start the development server |
+| `npm run build` | Build the production app |
+| `npm run start` | Start the production server |
+| `npm run lint` | Run the configured lint script |
 
 ## Environment variables
 
-Copy `.env.example` to `.env.local` and fill in only the integrations you intend to use.
+Copy the names from `.env.example`; configure only the integrations you use.
 
-| Variable | Required for | Notes |
-| --- | --- | --- |
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase features | Supabase project URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Browser/server Supabase client | Publishable/anon key; designed for client use when RLS is configured correctly |
-| `SUPABASE_SERVICE_ROLE_KEY` | Server-side ingestion/admin database operations | **Secret. Never expose to browser code or prefix with `NEXT_PUBLIC_`.** |
-| `GEMINI_API_KEY` | AI extraction | Google AI Studio API key |
-| `GEMINI_MODEL` | AI extraction | Example: `gemini-2.5-flash`; use a model enabled for your account |
-| `FIRECRAWL_API_KEY` | Page scraping/search | Firecrawl API key |
-| `FIRECRAWL_API_BASE_URL` | Page scraping/search | Usually `https://api.firecrawl.dev/v2` |
-| `TELEGRAM_BOT_TOKEN` | Telegram bot | Token created through `@BotFather` |
-| `TELEGRAM_WEBHOOK_SECRET` | Telegram webhook | Random secret checked by the webhook route |
-| `TELEGRAM_ALLOWED_CHAT_IDS` | Telegram access control | Comma-separated numeric chat IDs; configure an allowlist for production |
-| `APP_BASE_URL` | Telegram setup and generated callback/webhook URLs | Public HTTPS origin in production; `http://localhost:3000` locally |
-| `CRON_SECRET` | Protected ingestion/setup endpoints | Long random secret; keep distinct from the Telegram webhook secret |
+| Variable | Purpose |
+| --- | --- |
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase publishable/anon key |
+| `SUPABASE_SERVICE_ROLE_KEY` | Server-side database operations; secret and must never be exposed to the browser |
+| `GEMINI_API_KEY` | Gemini API key |
+| `GEMINI_MODEL` | Primary Gemini model |
+| `GEMINI_FALLBACK_MODEL` | Secondary Gemini model |
+| `OPENROUTER_API_KEY` | Optional OpenRouter fallback credential |
+| `OPENROUTER_MODEL` | OpenRouter model identifier |
+| `GROQ_API_KEY` | Optional Groq fallback credential |
+| `GROQ_MODEL` | Groq model identifier |
+| `FIRECRAWL_API_KEY` | Firecrawl API key |
+| `FIRECRAWL_API_BASE_URL` | Firecrawl API base URL; defaults to `https://api.firecrawl.dev/v2` |
+| `TELEGRAM_BOT_TOKEN` | Telegram bot token from @BotFather |
+| `TELEGRAM_WEBHOOK_SECRET` | Secret used to validate incoming Telegram webhook requests |
+| `TELEGRAM_ALLOWED_CHAT_IDS` | Comma-separated Telegram chat IDs allowed to submit links |
+| `APP_BASE_URL` | Public app origin; use HTTPS in production |
+| `CRON_SECRET` | Bearer secret protecting setup, ingestion, and worker endpoints |
 
-Do not paste secret values into the README. The example file intentionally contains blank placeholders.
+The AI extraction chain attempts the configured Gemini primary model, then the Gemini fallback when applicable, followed by Groq and OpenRouter when their credentials are configured. Provider/model availability and pricing can change; choose model IDs supported by your provider accounts.
 
-### Where to get the keys
+### Where to get credentials
 
-- Supabase: [Supabase Dashboard](https://supabase.com/dashboard)
-- Gemini: [Google AI Studio API keys](https://aistudio.google.com/apikey)
-- Firecrawl: [Firecrawl](https://www.firecrawl.dev/)
-- Telegram: open [@BotFather](https://t.me/BotFather) in Telegram
+- Supabase: https://supabase.com/dashboard
+- Gemini: https://aistudio.google.com/apikey
+- Firecrawl: https://www.firecrawl.dev/
+- OpenRouter: https://openrouter.ai/
+- Groq: https://console.groq.com/keys
+- Telegram: https://t.me/BotFather
 
-Firecrawl and AI providers may have usage limits or paid plans. Check current pricing and terms before enabling them.
+## Telegram bot setup
 
-## Supabase setup
+Telegram imports use a queue and a separate worker. Configuring only the bot token is not enough.
 
-1. Create a Supabase project.
-2. Open **Project Settings → API** (or the project's **Connect** panel) and copy the project URL and publishable/anon key.
-3. Add those values to `.env.local`.
-4. In the Supabase SQL Editor, run the repository's initial schema migration:
-   - `supabase/migrations/001_initial_schema.sql`
-5. Run the user workspace migration:
-   - `supabase/migrations/20261019_user_workspace.sql`
-6. In **Authentication → URL Configuration**, set the Site URL and allowed redirect URLs for local development and your deployed domain. Include the application's auth callback route as needed.
-7. Enable and configure email/password authentication and confirmation emails according to your deployment needs.
-8. Confirm Row Level Security (RLS) is enabled on user-owned tables and that policies restrict records to the authenticated owner.
-
-**Existing database warning:** If you created or altered tables manually while testing earlier versions, your schema may not match the checked-in migration files exactly. Review the actual columns, constraints, and policies before rerunning or modifying migrations. Do not assume a successful page load proves the database schema is fully reconciled. Back up important data before applying schema changes.
-
-For production, keep the Supabase service-role key server-only. It bypasses Row Level Security, so any code using it must perform its own authorization checks.
-
-## Opportunity ingestion and Telegram bot
-
-### Ingest a link
-
-The ingestion flow is intended for public opportunity pages:
-
-1. The API receives a URL.
-2. Firecrawl retrieves readable page content.
-3. Gemini extracts structured opportunity fields.
-4. The server validates the extracted data and stores the listing when database configuration is available.
-5. The result is returned to the caller.
-
-The source page remains authoritative. Confirm every AI-extracted field against the original listing.
-
-### Set up Telegram
-
-1. Create a bot using `@BotFather` and copy the bot token into `TELEGRAM_BOT_TOKEN`.
-2. Deploy the application to an HTTPS domain.
-3. Set `APP_BASE_URL` to the deployed origin, with no private credentials in the URL.
-4. Generate a long random value for `TELEGRAM_WEBHOOK_SECRET`.
-5. Set a different long random value for `CRON_SECRET`.
-6. Set `TELEGRAM_ALLOWED_CHAT_IDS` to the numeric chat IDs permitted to submit links. An empty allowlist is intentionally fail-closed and means submissions are not authorized.
-7. Add all values to your hosting provider's environment settings and redeploy.
-8. Register the webhook:
+1. Create a bot with [@BotFather](https://t.me/BotFather) and set `TELEGRAM_BOT_TOKEN`.
+2. Set `TELEGRAM_WEBHOOK_SECRET` to a long random value.
+3. Set `TELEGRAM_ALLOWED_CHAT_IDS` to the numeric chat IDs allowed to submit opportunity links. An empty allowlist is fail-closed.
+4. Set `APP_BASE_URL` to your deployed HTTPS origin.
+5. Set `CRON_SECRET` to a long random value.
+6. Add the same value as a GitHub Actions repository secret named `OPPORTUNITYKIT_CRON_SECRET` in **Settings → Secrets and variables → Actions**.
+7. Add the app environment variables in Vercel and redeploy.
+8. Register the Telegram webhook by calling the protected setup endpoint:
 
 ```bash
 curl -X POST "$APP_BASE_URL/api/telegram/setup" \
   -H "Authorization: Bearer $CRON_SECRET"
 ```
 
-9. Send a public opportunity URL directly to the bot and review the response.
+9. Ensure the GitHub Actions workflow `.github/workflows/telegram-import-worker.yml` is enabled. It runs on a five-minute schedule and can also be started manually from the Actions tab.
+10. Send a public opportunity URL to the bot. The bot should acknowledge that the link was queued, then send a result after the worker processes it.
 
-Do not share the bot token or webhook secrets. Restrict bot access to trusted chat IDs and do not expose the setup endpoint without its authorization header.
+**Important:** The GitHub secret `OPPORTUNITYKIT_CRON_SECRET` must exactly match the Vercel environment variable `CRON_SECRET`. If they differ, the scheduled worker receives an unauthorized response. The worker also requires Supabase service-role access, Firecrawl, and Telegram configuration in the deployed app.
+
+Keep bot tokens and secrets private. Do not put secrets in a URL, commit them, or share them in screenshots.
 
 ## API reference
-
-The exact response fields may change with implementation updates. The following describes the main routes currently included in the project.
 
 | Method | Endpoint | Purpose |
 | --- | --- | --- |
 | `GET` | `/api/health` | Reports whether key integrations are configured |
 | `GET` | `/api/opportunities` | Returns available opportunity listings |
-| `POST` | `/api/ingest/link` | Ingests a single opportunity URL |
-| `POST` | `/api/scrape` | Batch-ingests a bounded list of URLs (up to 10) |
-| `POST` | `/api/discover/search` | Searches for opportunities and processes a bounded number of results |
-| `POST` | `/api/telegram/setup` | Registers the Telegram webhook; requires bearer authorization |
-| `POST` | `/api/telegram/webhook` | Receives Telegram updates and imports a submitted URL |
+| `POST` | `/api/ingest/link` | Ingests one public opportunity URL; requires bearer authorization |
+| `POST` | `/api/scrape` | Batch-ingests a bounded list of URLs |
+| `POST` | `/api/discover/search` | Searches for opportunities and processes a bounded result set |
+| `POST` | `/api/telegram/setup` | Registers the Telegram webhook; requires `CRON_SECRET` |
+| `POST` | `/api/telegram/webhook` | Receives Telegram updates and queues a submitted URL |
+| `GET` / `POST` | `/api/telegram/worker` | Claims and processes queued imports; requires `CRON_SECRET` |
 
-### Example: check health
+### Health check
 
 ```bash
 curl "$APP_BASE_URL/api/health"
 ```
 
-### Example: ingest one URL
+### Ingest a URL
 
 ```bash
 curl -X POST "$APP_BASE_URL/api/ingest/link" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $CRON_SECRET" \
-  -d '{"url":"https://official.example.org/opportunity"}'
+  -d '{"url":"https://example.org/opportunity"}'
 ```
 
-### Example: batch ingest URLs
-
-```bash
-curl -X POST "$APP_BASE_URL/api/scrape" \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $CRON_SECRET" \
-  -d '{"urls":["https://official.example.org/opportunity"]}'
-```
-
-### Example: search for opportunities
-
-```bash
-curl -X POST "$APP_BASE_URL/api/discover/search" \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $CRON_SECRET" \
-  -d '{"query":"student hackathons accepting applications","limit":5}'
-```
-
-Use real public source URLs in place of the example domain. Protect ingestion endpoints from abuse and keep request sizes and provider usage within acceptable limits.
-
-## Run locally
-
-For a quick local check:
-
-```bash
-npm install
-cp .env.example .env.local
-# Edit .env.local with your Supabase settings
-npm run dev
-```
-
-Then test the following manually:
-
-- Sign up and sign in with a test account.
-- Verify auth redirects and sign-out behavior.
-- Edit and save profile fields.
-- Save an opportunity, refresh, and confirm it remains saved.
-- Add an application tracker entry, update its status, and confirm persistence after refresh.
-- Test with a second account and confirm it cannot see the first account's private records.
-- Test ingestion endpoints only after configuring the relevant server-side keys and authorization secrets.
-
-These are recommended verification steps, not a statement that every test has been run in every environment.
+Use public source URLs and verify the returned details on the original page.
 
 ## Deploy to Vercel
 
-1. Push the repository to GitHub.
-2. Open [Vercel New Project](https://vercel.com/new) and import `awakenedarpit/OpportunityKit-v2`.
-3. Keep the framework preset set to **Next.js**.
-4. Use the default build command or `npm run build`.
-5. Leave the output directory at the Next.js default; do not configure static export output such as `out` because this app uses server route handlers.
-6. Add the required environment variables in **Project Settings → Environment Variables** for the environments you will use.
-7. Deploy and configure Supabase Auth redirect URLs to match the deployed domain.
-8. Set `APP_BASE_URL` to the public HTTPS deployment origin, redeploy, and register the Telegram webhook if using the bot.
-9. Open `/api/health` and run the manual verification checklist above.
+1. Import `awakenedarpit/OpportunityKit-v2` at https://vercel.com/new.
+2. Use the Next.js framework preset and the standard Next.js build settings.
+3. Add the environment variables required by your enabled features.
+4. Deploy the application.
+5. Add the deployed domain to Supabase Auth redirect settings.
+6. Set `APP_BASE_URL` to the public HTTPS deployment URL and redeploy.
+7. If using Telegram, complete the Telegram setup above and add the matching GitHub Actions secret.
+8. Check `/api/health` and test authentication, saved items, application tracking, and Telegram ingestion.
 
-Environment variable changes usually require a new deployment before they take effect. Never place service-role keys or bot tokens in client-side variables.
+Environment variable changes generally require a redeployment. Never expose service-role keys or bot tokens in client-side code.
 
-## Security and privacy
+## Security and data quality
 
-- Never commit `.env.local`, service-role keys, Gemini/Firecrawl keys, Telegram bot tokens, or webhook secrets.
-- Keep `SUPABASE_SERVICE_ROLE_KEY` on the server only. It bypasses RLS.
-- Keep RLS enabled on all user-owned data and verify ownership policies using separate test accounts.
-- Configure Telegram's chat allowlist before enabling submissions outside a private test.
-- Use a different secret for `CRON_SECRET` and `TELEGRAM_WEBHOOK_SECRET`.
-- Validate untrusted page content and AI output; do not treat scraped text as trusted instructions.
-- Add rate limiting, monitoring, error reporting, and abuse protection before broad public access.
-- Configure leaked-password protection and other available Supabase Auth security controls.
-- Do not rely on AI-extracted deadlines or eligibility without checking the official opportunity page.
+- Never commit `.env.local`, service-role keys, AI provider keys, Telegram tokens, or shared secrets.
+- Keep `SUPABASE_SERVICE_ROLE_KEY` server-side only; it bypasses RLS.
+- Keep RLS enabled and test that one user cannot access another user's private records.
+- Restrict Telegram submissions with `TELEGRAM_ALLOWED_CHAT_IDS`.
+- Use different values for `CRON_SECRET` and `TELEGRAM_WEBHOOK_SECRET`.
+- Treat scraped webpage content and AI output as untrusted data.
+- Verify deadlines, eligibility, stipend details, and application instructions on the official source.
+- Add appropriate monitoring, rate limiting, and abuse protection before broad public use.
 
 ## Known limitations
 
-- Opportunity sources and listing quality depend on the data currently available in the database and starter data. Not every listing is guaranteed to be live, current, or independently verified.
-- Gemini extraction can produce incorrect, incomplete, or outdated fields.
-- Firecrawl/Gemini/Telegram integrations require valid keys, appropriate account access, and deployment configuration.
-- The README's setup steps do not replace an end-to-end test of your own Supabase project and deployment.
-- Existing Supabase projects may have schema changes applied manually; compare the live schema with the checked-in SQL migrations before relying on migrations for reproducible setup.
-- AI fit-report functionality and other integration surfaces may require further verification before being treated as production-ready.
-- The project has not been represented as security-audited or fully tested against all deployment configurations.
+- Listing coverage and freshness depend on the sources and data currently available.
+- Some listings may be sample, incomplete, expired, or unverified.
+- AI extraction can misinterpret or omit information.
+- Scraping may fail on pages that require login, block automated access, or provide little readable content.
+- External services have their own rate limits, model availability, and pricing.
+- The project has not been represented as security-audited or fully tested against every deployment configuration.
 
 ## Contributing
 
-Contributions and issue reports are welcome.
+Contributions and bug reports are welcome.
 
 1. Fork the repository.
 2. Create a focused branch for your change.
-3. Keep credentials and personal data out of commits, logs, and screenshots.
-4. Run the relevant checks locally.
-5. Open a pull request with a concise description, screenshots for UI changes, and any required database migration notes.
+3. Keep credentials and personal data out of commits and logs.
+4. Run relevant checks locally.
+5. Open a pull request with a clear summary and migration notes if database changes are involved.
 
-For bugs and feature requests, use the [GitHub Issues](https://github.com/awakenedarpit/OpportunityKit-v2/issues) page.
+Use [GitHub Issues](https://github.com/awakenedarpit/OpportunityKit-v2/issues) for bugs and feature requests.
 
 ## License
 
