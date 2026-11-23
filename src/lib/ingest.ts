@@ -124,7 +124,7 @@ async function generateWithOpenRouter(prompt: string): Promise<string> {
           ],
           response_format: { type: 'json_object' },
           max_tokens: 4_096,
-          reasoning: { effort: 'low' },
+          reasoning: { effort: 'none' },
           temperature: 0.1,
         }),
         signal: AbortSignal.timeout(PROVIDER_TIMEOUT_MS),
