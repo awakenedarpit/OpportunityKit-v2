@@ -47,6 +47,26 @@ function safeProviderError(error: unknown): string {
     .slice(0, 600);
 }
 
+function chatCompletionText(message: unknown): string {
+  if (!message || typeof message !== 'object') return '';
+  const value = message as { content?: unknown; refusal?: unknown };
+  if (typeof value.content === 'string') return value.content.trim();
+  if (Array.isArray(value.content)) {
+    return value.content
+      .map(part => {
+        if (typeof part === 'string') return part;
+        if (part && typeof part === 'object' && typeof (part as { text?: unknown }).text === 'string') {
+          return (part as { text: string }).text;
+        }
+        return '';
+      })
+      .join('')
+      .trim();
+  }
+  if (typeof value.refusal === 'string') throw new Error(`AI provider refused the extraction: ${value.refusal.slice(0, 240)}`);
+  return '';
+}
+
 async function withTimeout<T>(promise: Promise<T>, timeoutMs: number, message: string): Promise<T> {
   let timer: ReturnType<typeof setTimeout> | undefined;
   try {
@@ -115,8 +135,8 @@ async function generateWithOpenRouter(prompt: string): Promise<string> {
         if (![429, 500, 502, 503, 504].includes(response.status) || attempt === 2) throw error;
         lastError = error;
       } else {
-        const result = body?.choices?.[0]?.message?.content;
-        if (typeof result !== 'string' || !result.trim()) throw new Error('OpenRouter returned an empty response');
+        const result = chatCompletionText(body?.choices?.[0]?.message);
+        if (!result) throw new Error('OpenRouter returned an empty response');
         parseProviderJson(result);
         return result;
       }
@@ -164,8 +184,8 @@ async function generateWithGroq(prompt: string): Promise<string> {
         if (![429, 500, 502, 503, 504].includes(response.status) || attempt === 2) throw error;
         lastError = error;
       } else {
-        const result = body?.choices?.[0]?.message?.content;
-        if (typeof result !== 'string' || !result.trim()) throw new Error('Groq returned an empty response');
+        const result = chatCompletionText(body?.choices?.[0]?.message);
+        if (!result) throw new Error('Groq returned an empty response');
         parseProviderJson(result);
         return result;
       }
