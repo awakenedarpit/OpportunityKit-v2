@@ -1,8 +1,25 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { after, NextRequest, NextResponse } from 'next/server';
 import { getAdminSupabase } from '@/lib/supabase';
 import { isAuthorizedTelegramChat, isValidHttpUrl } from '@/lib/security';
 
 const api = (method: string) => `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/${method}`;
+
+async function wakeWorker(request: NextRequest) {
+  const cronSecret = process.env.CRON_SECRET;
+  if (!cronSecret) {
+    console.error('Telegram worker wake-up skipped: CRON_SECRET is not configured');
+    return;
+  }
+  try {
+    const response = await fetch(new URL('/api/telegram/worker', request.url), {
+      headers: { Authorization: `Bearer ${cronSecret}` },
+      signal: AbortSignal.timeout(55000),
+    });
+    if (!response.ok) console.error('Telegram worker wake-up failed:', response.status);
+  } catch (error) {
+    console.error('Telegram worker wake-up failed:', error instanceof Error ? error.message : String(error));
+  }
+}
 
 async function send(chatId: string | number, text: string) {
   const token = process.env.TELEGRAM_BOT_TOKEN;
@@ -119,6 +136,7 @@ export async function POST(req: NextRequest) {
     } catch (replyError) {
       console.error('Telegram queue acknowledgement failed:', replyError instanceof Error ? replyError.message : String(replyError));
     }
+    if (queued > 0) after(() => wakeWorker(req));
     return NextResponse.json({ ok: true, accepted: queued > 0, queued, duplicates });
   } catch (error) {
     console.error('Telegram webhook error:', error);
