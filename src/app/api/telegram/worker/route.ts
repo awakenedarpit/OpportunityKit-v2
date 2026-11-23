@@ -7,6 +7,20 @@ export const maxDuration = 60;
 type Job = { id: number; chat_id: string; url: string; attempts: number };
 const telegramApi = (method: string) => `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/${method}`;
 
+function isLikelyVideoUrl(value: string) {
+  try {
+    const hostname = new URL(value).hostname.toLowerCase().replace(/^www\./, '');
+    return hostname === 'youtube.com'
+      || hostname === 'youtu.be'
+      || hostname === 'm.youtube.com'
+      || hostname === 'music.youtube.com'
+      || hostname === 'vimeo.com'
+      || hostname.endsWith('.vimeo.com');
+  } catch {
+    return false;
+  }
+}
+
 async function send(chatId: string, text: string) {
   const token = process.env.TELEGRAM_BOT_TOKEN;
   if (!token) throw new Error('TELEGRAM_BOT_TOKEN is not configured');
@@ -39,7 +53,7 @@ async function runWorker(req: NextRequest) {
     return NextResponse.json({ error: 'Firecrawl or Telegram configuration is missing' }, { status: 503 });
   }
 
-  const { data, error } = await db.rpc('claim_telegram_import_jobs', { p_limit: 1 });
+  const { data, error } = await db.rpc('claim_telegram_import_jobs', { p_limit: 3 });
   if (error) {
     console.error('Telegram queue claim failed:', error.message);
     return NextResponse.json({ error: 'Could not claim queued import' }, { status: 500 });
@@ -49,8 +63,17 @@ async function runWorker(req: NextRequest) {
   if (!jobs.length) return NextResponse.json({ ok: true, processed: 0 });
 
   let completed = 0;
-  for (const job of jobs) {
+  await Promise.all(jobs.map(async job => {
     try {
+      if (isLikelyVideoUrl(job.url)) {
+        await send(job.chat_id, 'ℹ️ I skipped this link because it is a video page, not an opportunity page. Send the hackathon or opportunity website link to import it.');
+        const { error: updateError } = await db.from('telegram_import_jobs')
+          .update({ status: 'completed', last_error: 'Skipped non-opportunity video URL', locked_at: null, updated_at: new Date().toISOString() })
+          .eq('id', job.id);
+        if (updateError) throw updateError;
+        completed += 1;
+        return;
+      }
       const item = await ingestLink(job.url, job.chat_id);
       const summary = [
         '✅ Opportunity saved to OpportunityKit',
@@ -89,7 +112,7 @@ async function runWorker(req: NextRequest) {
         catch (sendError) { console.error('Telegram failure notification failed:', sendError); }
       }
     }
-  }
+  }));
   return NextResponse.json({ ok: true, processed: jobs.length, completed });
 }
 
