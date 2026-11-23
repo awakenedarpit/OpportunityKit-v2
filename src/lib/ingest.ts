@@ -7,6 +7,7 @@ const firecrawlBase = (process.env.FIRECRAWL_API_BASE_URL || 'https://api.firecr
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 const PROVIDER_TIMEOUT_MS = 25_000;
 const SCRAPE_TIMEOUT_MS = 30_000;
+const EXTRACTION_MAX_TOKENS = 2_048;
 
 const providerPayloadSchema = z.object({
   title: z.string().trim().min(1),
@@ -37,6 +38,13 @@ function normalizedDate(value: unknown): string | null {
   const parsed = new Date(input);
   if (Number.isNaN(parsed.getTime())) return null;
   return parsed.toISOString().slice(0, 10);
+}
+
+function safeProviderError(error: unknown): string {
+  return (error instanceof Error ? error.message : String(error))
+    .replace(/https?:\/\/\S+/gi, '[provider-url]')
+    .replace(/(api[_-]?key|authorization|bearer|token|secret)\s*[:=]\s*\S+/gi, '$1: [redacted]')
+    .slice(0, 600);
 }
 
 async function withTimeout<T>(promise: Promise<T>, timeoutMs: number, message: string): Promise<T> {
@@ -95,6 +103,7 @@ async function generateWithOpenRouter(prompt: string): Promise<string> {
             { role: 'user', content: prompt },
           ],
           response_format: { type: 'json_object' },
+          max_tokens: EXTRACTION_MAX_TOKENS,
           temperature: 0.1,
         }),
         signal: AbortSignal.timeout(PROVIDER_TIMEOUT_MS),
@@ -143,6 +152,7 @@ async function generateWithGroq(prompt: string): Promise<string> {
             { role: 'user', content: prompt },
           ],
           response_format: { type: 'json_object' },
+          max_tokens: EXTRACTION_MAX_TOKENS,
           temperature: 0.1,
         }),
         signal: AbortSignal.timeout(PROVIDER_TIMEOUT_MS),
@@ -261,7 +271,7 @@ export async function extractOpportunity(input: { url: string; markdown: string;
       try {
         responseText = await generateWithGroq(prompt);
       } catch (error) {
-        providerErrors.push(`Groq: ${error instanceof Error ? error.message : String(error)}`);
+        providerErrors.push(`Groq: ${safeProviderError(error)}`);
       }
     } else {
       providerErrors.push('Groq: GROQ_API_KEY is not configured');
@@ -271,7 +281,7 @@ export async function extractOpportunity(input: { url: string; markdown: string;
       try {
         responseText = await generateWithOpenRouter(prompt);
       } catch (error) {
-        providerErrors.push(`OpenRouter: ${error instanceof Error ? error.message : String(error)}`);
+        providerErrors.push(`OpenRouter: ${safeProviderError(error)}`);
       }
     } else if (!responseText) {
       providerErrors.push('OpenRouter: OPENROUTER_API_KEY is not configured');
@@ -279,7 +289,7 @@ export async function extractOpportunity(input: { url: string; markdown: string;
 
     if (!responseText) {
       const geminiSummary = genAI
-        ? `Gemini failed (model: ${primaryModel}, fallback: ${fallbackModel}): ${geminiError instanceof Error ? geminiError.message : String(geminiError)}`
+        ? `Gemini failed (model: ${primaryModel}, fallback: ${fallbackModel}): ${safeProviderError(geminiError)}`
         : 'Gemini skipped because GEMINI_API_KEY is not configured';
       throw new Error(`${geminiSummary}. ${providerErrors.join('. ')}`);
     }
