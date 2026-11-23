@@ -30,6 +30,12 @@ Test URL: `https://founders-house-kolkata.devfolio.co/overview`
 - Live `/discover` HTML contained both `Founders' House Kolkata` and the source URL.
 - The worker endpoint accepted the GitHub Actions bearer secret; its successful completion invokes the existing Telegram success-notification path.
 
+## Follow-up: video link blocking
+
+A later test exposed a queue-drain defect. A YouTube URL consumed two timed-out worker attempts and then reached terminal failure, while a hackathon URL sent afterward remained pending. Concurrent webhook wake-ups could claim the slow video job and return before another worker claimed the later job.
+
+Commit `cd94df5` fixes this by recognizing YouTube, youtu.be, and Vimeo URLs before scraping, sending a clear Telegram message that video pages are skipped, and completing that queue item without creating an opportunity. The worker now claims up to three jobs and processes them concurrently, so one slow or unsupported URL cannot block later links. The fix is deployed and verified: `https://hackculture.io/hackathons/adaptive-intelligence-challenge` became the completed opportunity **Adaptive Intelligence Challenge** with category `Hackathon`.
+
 ## Repository and deployment verification
 
 - `npm run build`: passed.
